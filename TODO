@@ -1,0 +1,41 @@
+Fork au début et lance le bot et l'interface web
+
+Bot
+===
+
+Connexion IRC (https://github.com/justintv/Twitch-API/blob/master/IRC.md)
+
+Gestion de la langue (https://github.com/justintv/Twitch-API/blob/master/IRC.md#roomstate-1 broadcaster-lang)
+    polib ?
+
+Configuration : https://docs.python.org/3/library/configparser.html ou sqlite3
+
+Interface web
+=============
+
+Bottle (http://bottlepy.org/docs/dev/index.html)
+
+Système pour passer les infos entre le bot et l'interface web (l'interface ne devrait pouvoir faire aucune action direct sur la conf ou sur l'irc).
+
+
+Gestion des modules
+===================
+
+Un module python chargé automatiquement.
+
+Permet :
+
+    * Lecture des entrées et envois d'une sortie
+    * Appel récurrent
+    * Ajout de page sur l'interface web
+    * Configuration (séparation des configs des différents modules !)
+
+
+Général
+=======
+
+Deamonize (compatible windows/linux)
+
+
+https://gist.github.com/anonymous/522faa80e0ec915d5d21
+https://github.com/RLejolivet/Larbot/blob/master/Larbot/larbot.py
