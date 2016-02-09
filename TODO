@@ -15,7 +15,7 @@ Interface web
 
 Bottle (http://bottlepy.org/docs/dev/index.html)
 
-Système pour passer les infos entre le bot et l'interface web (l'interface ne devrait pouvoir faire aucune action direct sur la conf ou sur l'irc).
+Système pour passer les infos entre le bot et l'interface web (update de la conf, ...).
 
 
 Gestion des modules
