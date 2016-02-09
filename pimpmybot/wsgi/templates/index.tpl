@@ -1,1 +1,0 @@
-<h1>Pimp My Bot</h1>

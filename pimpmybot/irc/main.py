@@ -12,6 +12,8 @@ def run(pipe):
     s.send('PASS oauth:{0}\r\n'.format(OAUTH).encode('utf8'))
     s.send('NICK {0}\r\n'.format(USERNAME).encode('utf8'))
     while True:
-        print(s.recv(1024).decode())
-        print('\n')
+        response = s.recv(1024).decode().strip()
+        if response:
+            print(response)
+            print('\n')
     s.close()
