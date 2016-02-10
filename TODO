@@ -10,7 +10,9 @@ Connexion IRC (https://github.com/justintv/Twitch-API/blob/master/IRC.md)
 Gestion de la langue (https://github.com/justintv/Twitch-API/blob/master/IRC.md#roomstate-1 broadcaster-lang)
     polib ?
 
-Configuration : sqlite3, un objet par module
+Configuration : sqlite3 => peewee
+
+https://pypi.python.org/pypi/appdirs
 
 Interface web
 =============
