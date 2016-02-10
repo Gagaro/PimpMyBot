@@ -43,9 +43,16 @@ class Client(object):
 
     def run(self):
         while True:
-            response = self.socket.recv(1024).decode().strip()
+            try:
+                response = self.socket.recv(1024).decode().strip()
+            except OSError:
+                # Socket is probably close, let's wait until it's connected
+                # FIXME Find a way to handle this cleanly
+                import time
+                time.sleep(5)
+                continue
             if response:
-                logger.debug('< {0}\n'.format(response))
+                logger.debug('< {0}'.format(response))
                 self.handle(response)
 
     def add_handler(self, handler):
@@ -56,5 +63,5 @@ class Client(object):
 
     def handle(self, response):
         for handler in self.handlers:
-            if handler.handle(response, self.socket):
+            if handler.handle(response, self):
                 return
