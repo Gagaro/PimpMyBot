@@ -8,7 +8,7 @@ Connexion IRC (https://github.com/justintv/Twitch-API/blob/master/IRC.md)
 Gestion de la langue (https://github.com/justintv/Twitch-API/blob/master/IRC.md#roomstate-1 broadcaster-lang)
     polib ?
 
-Configuration : https://docs.python.org/3/library/configparser.html ou sqlite3
+Configuration : sqlite3, un objet par module
 
 Interface web
 =============

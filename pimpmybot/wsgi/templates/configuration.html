@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block head_title %}Configuration{% endblock %}
+{% block title %}Configuration{% endblock %}
+
+{% block content %}
+{% if message %}
+<div class="alert alert-success">{{ message }}</div>
+{% endif %}
+
+<form action="{{ url('configuration') }}" method="post" role="form">
+    <div class="panel panel-default">
+        <div class="panel-heading">Twitch Bot</div>
+        <div class="panel-body">
+            <div class="form-group">
+                <label>Twitch Bot Username</label>
+                <input class="form-control" name="username" value="{{ config.username }}" />
+            </div>
+
+            <div class="form-group">
+                <label>Twitch Bot Oauth Token</label>
+                <input class="form-control" name="oauth" value="{{ config.oauth }}" />
+                <p class="help-block">You can get yours <a href="http://twitchapps.com/tmi/">here</a>.</p>
+            </div>
+
+            <input type="submit" value="Save" />
+        </div>
+    </div>
+</form>
+{% endblock %}

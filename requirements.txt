@@ -1,3 +1,5 @@
+appdirs
 bottle
 jinja2
+peewee
 requests
