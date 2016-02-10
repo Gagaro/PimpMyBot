@@ -5,11 +5,8 @@ from irc.main import run as irc_run
 
 
 if __name__ == "__main__":
-    # We fork into two processes, the web server and the irc bot
+    # We fork the process, the parent is the wsgi so it can get the bot status and restart it if needed.
     wsgi_pipe, irc_pipe = Pipe()
-    wsgi_process = Process(target=wsgi_run, args=(wsgi_pipe,))
     irc_process = Process(target=irc_run, args=(irc_pipe,))
     irc_process.start()
-    wsgi_process.start()
-    irc_process.join()
-    wsgi_process.join()
+    wsgi_run(wsgi_pipe, irc_process)

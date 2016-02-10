@@ -20,6 +20,10 @@ Jinja2Template.settings = {
     'autoescape': True,
 }
 
+# Globals
+pipe = None
+irc_process = None
+
 
 @route('/', name='index')
 @jinja2_view('index')
@@ -52,10 +56,10 @@ def server_static(filepath):
     return static_file(filepath, root=root_path)
 
 
-def run(pipe=None):
+def run(wsgi_pipe, process):
+    global pipe, irc_process
+
+    pipe = wsgi_pipe
+    irc_process = process
     debug(True)
     bottle_run(host='localhost', port=8000)
-
-
-if __name__ == '__main__':
-    run()

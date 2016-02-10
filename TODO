@@ -1,5 +1,7 @@
 Fork au début et lance le bot et l'interface web
 
+=> Le parent devrait etre l'interface web afin de pouvoir relancer le bot et d'avoir son statut.
+
 Bot
 ===
 

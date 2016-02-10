@@ -1,5 +1,7 @@
 appdirs
 bottle
 jinja2
-peewee
+#peewee
+-e git+https://github.com/coleifer/peewee.git#egg=peewee
 requests
+six
