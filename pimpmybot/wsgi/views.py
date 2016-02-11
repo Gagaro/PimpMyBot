@@ -1,33 +1,42 @@
 import os
 
 from bottle import (
-    TEMPLATE_PATH, Jinja2Template,
-    debug, jinja2_view, request, route,
-    run as bottle_run, static_file, url
+    Jinja2Template, jinja2_view, request, static_file
 )
 
 from common.config import Configuration
+from wsgi import BASE_DIR, app
 
-# Bottle configuration
-BASE_DIR = os.path.dirname(__file__)
-TEMPLATE_PATH[:] = [os.path.join(BASE_DIR, 'templates')]
 
 # Jinja2 configuration
-Jinja2Template.defaults = {
-    'url': url,
-}
 Jinja2Template.settings = {
     'autoescape': True,
 }
+Jinja2Template.defaults = {
+    'url': app.get_url,
+    'irc_bot_is_alive': lambda: app.is_bot_alive(),
+}
 
-# Globals
-pipe = None
-irc_process = None
+route = app.route
 
 
 @route('/', name='index')
 @jinja2_view('index')
 def index_view():
+    return {}
+
+
+@route('/status', name='status')
+@jinja2_view('status')
+def status_view():
+    return {}
+
+
+@route('/status', name='status', method="POST")
+@jinja2_view('status')
+def status_view_post():
+    if 'restart' in request.forms.keys():
+        app.restart_irc_bot()
     return {}
 
 
@@ -54,12 +63,3 @@ def configuration_view_post():
 def server_static(filepath):
     root_path = os.path.join(BASE_DIR, 'static')
     return static_file(filepath, root=root_path)
-
-
-def run(wsgi_pipe, process):
-    global pipe, irc_process
-
-    pipe = wsgi_pipe
-    irc_process = process
-    debug(True)
-    bottle_run(host='localhost', port=8000)

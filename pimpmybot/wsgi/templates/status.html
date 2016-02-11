@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block head_title %}Status{% endblock %}
+{% block title %}Status{% endblock %}
+
+{% block content %}
+<div class="row">
+    <form action="{{ url('status') }}" method="post">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Irc Bot</th>
+                    <td>
+                        {% if irc_bot_is_alive() %}
+                        <i class="fa fa-2x fa-smile-o text-success" title="Running"></i>
+                        {% else %}
+                        <i class="fa fa-2x fa-frown-o text-danger" title="Dead"></i>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>{% if irc_bot_is_alive() %}Restart{% else %}Start{% endif %}</th>
+                    <td>
+                        {% if irc_bot_is_alive() %}
+                        <input class="btn btn-warning" type="submit" name="restart" value="Restart" />
+                        {% else %}
+                        <input class="btn btn-primary" type="submit" name="restart" value="Start" />
+                        {% endif %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+{% endblock %}
