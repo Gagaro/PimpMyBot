@@ -8,16 +8,20 @@ from common.logging import get_logger
 
 logger = get_logger('irc', DEBUG)
 
-HOST = 'irc.twitch.tv'
+#HOST = 'irc.twitch.tv'
+HOST = 'localhost'
 PORT = 6667
 
 
 class Client(object):
     """ Connect to IRC and dispatch the messages to the handlers. """
-    def __init__(self):
-        self.config = Configuration.get_or_create()[0]
+    def __init__(self, pipe):
+        self.pipe = pipe
+        self.config = Configuration.get()
         self.socket = socket.socket()
         self.handlers = []
+
+        self.load_modules()
 
     def connect(self):
         self.socket.close()
@@ -55,6 +59,21 @@ class Client(object):
                 logger.debug('< {0}'.format(response))
                 self.handle(response)
 
+    def load_modules(self):
+        for module in self.config.modules:
+            if module.activated:
+                self.load_module(module)
+
+    def load_module(self, module):
+        logger.debug('Loading module "{0}"'.format(module.identifier))
+        module = module.get_module()
+        for handler in module.handlers:
+            self.add_handler(handler)
+
+    def unload_module(self, module):
+        for handler in module.handlers:
+            self.remove_handler(handler)
+
     def add_handler(self, handler):
         self.handlers.append(handler)
 
@@ -63,10 +82,11 @@ class Client(object):
 
     def handle(self, response):
         for handler in self.handlers:
-            if handler.handle(response, self):
+            if handler(response, self):
                 return
 
+
 def run(pipe):
-    client = Client()
+    client = Client(pipe)
     client.connect()
     client.run()

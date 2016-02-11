@@ -3,6 +3,7 @@ import os
 
 from bottle import TEMPLATE_PATH, Bottle, debug
 
+from common.modules import modules
 from irc.client import run as irc_run
 
 # Bottle configuration
