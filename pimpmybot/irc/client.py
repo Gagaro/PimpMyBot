@@ -65,3 +65,8 @@ class Client(object):
         for handler in self.handlers:
             if handler.handle(response, self):
                 return
+
+def run(pipe):
+    client = Client()
+    client.connect()
+    client.run()

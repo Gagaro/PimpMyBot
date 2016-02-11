@@ -3,7 +3,7 @@ import os
 
 from bottle import TEMPLATE_PATH, Bottle, debug
 
-from irc.main import run as irc_run
+from irc.client import run as irc_run
 
 # Bottle configuration
 debug(True)
@@ -21,8 +21,8 @@ class App(Bottle):
         self.irc_process = None
 
     def run(self):
-        super(App, self).run()
         self.restart_irc_bot()
+        super(App, self).run()
 
     def is_bot_alive(self):
         return self.irc_process is not None and self.irc_process.is_alive()
