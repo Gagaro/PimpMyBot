@@ -6,6 +6,7 @@ from bottle import (
 
 from common.config import Configuration
 from wsgi import BASE_DIR, app
+from wsgi.modules import get_menu, get_dashboard
 
 
 # Jinja2 configuration
@@ -14,7 +15,8 @@ Jinja2Template.settings = {
 }
 Jinja2Template.defaults = {
     'url': app.get_url,
-    'irc_bot_is_alive': lambda: app.is_bot_alive(),
+    'irc_bot_is_alive': app.is_bot_alive,
+    'menu': get_menu,
 }
 
 route = app.route
@@ -23,7 +25,9 @@ route = app.route
 @route('/', name='index')
 @jinja2_view('index')
 def index_view():
-    return {}
+    return {
+        'dashboard': get_dashboard()
+    }
 
 
 @route('/status', name='status')

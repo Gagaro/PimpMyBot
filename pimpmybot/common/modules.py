@@ -52,6 +52,44 @@ class BaseModule(object):
         self.config.installed = False
         self.config.save()
 
+    def get_menus(self):
+        """
+        Called by the web server to add menu.
+        Should return a list such as the following:
+
+        [
+            {
+                "title": "My module menu",
+                "icon": "list",  # Fontawesome icon name: http://fortawesome.github.io/Font-Awesome/icons/
+                "menu": [
+                    {
+                        "title": "My module page",
+                        "view": "my_module_page"  # Bottle view name
+                    },
+                    {
+                        "title": "My module other page",
+                        "view": "my_module_other_page"
+                    },
+                ]
+            },
+        ]
+        """
+        return []
+
+    def get_dashboard(self):
+        """
+        Called by the web server to add dashboard panels.
+        Should return a list such as the following:
+
+        [
+            {
+                "title": "My module dashboard",
+                "html": "<p>I am a paragraph</p>"
+            },
+        ]
+        """
+        return []
+
 
 def load_modules():
     """ Search through all modules directory and import the detected modules. """

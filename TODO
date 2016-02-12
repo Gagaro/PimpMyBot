@@ -20,6 +20,7 @@ Interface web
 Bottle (http://bottlepy.org/docs/dev/index.html)
 
 Système pour passer les infos entre le bot et l'interface web (update de la conf, ...).
+    => reload du bot pour le moment ?
 
 
 Gestion des modules
@@ -30,8 +31,11 @@ Un module python chargé automatiquement.
 Permet :
 
     * Lecture des entrées et envois d'une sortie
-    * Appel récurrent
     * Ajout de page sur l'interface web
+        * Routes
+        * Menu
+        * Dashboard
+    * Appel récurrent
     * Configuration (séparation des configs des différents modules !)
 
 

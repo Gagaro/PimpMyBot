@@ -90,6 +90,21 @@
                         <li>
                             <a href="{{ url('configuration') }}"><i class="fa fa-table fa-fw"></i> Configuration</a>
                         </li>
+                        {% macro create_menu(menu, level=1) %}
+                            {% for entry in menu %}
+                            <li>
+                                {% if 'menu' in entry.keys() %}
+                                <a href="#">{% if 'icon' in entry.keys() %}<i class="fa fa-{{ entry['icon'] }} fa-fw"></i> {% endif %}{{ entry['title'] }} <span class="fa arrow"></span></a>
+                                <ul class="nav {% if level == 1 %}nav-second-level{% else %}nav-third-level{% endif %} collapse">
+                                    {{ create_menu(entry['menu'], level=level + 1) }}
+                                </ul>
+                                {% elif 'view' in entry.keys() %}
+                                <a href="{{ url(entry['view']) }}">{% if 'icon' in entry.keys() %}<i class="fa fa-{{ entry['icon'] }} fa-fw"></i> {% endif %} {{ entry['title'] }}</a>
+                                {% endif %}
+                            </li>
+                            {% endfor %}
+                        {% endmacro %}
+                        {{ create_menu(menu()) }}
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->

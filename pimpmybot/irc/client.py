@@ -60,9 +60,8 @@ class Client(object):
                 self.handle(response)
 
     def load_modules(self):
-        for module in self.config.modules:
-            if module.activated:
-                self.load_module(module)
+        for module in self.config.get_activated_modules():
+            self.load_module(module)
 
     def load_module(self, module):
         logger.debug('Loading module "{0}"'.format(module.identifier))

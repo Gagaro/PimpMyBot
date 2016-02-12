@@ -11,6 +11,10 @@ class Configuration(Model):
 
     username = CharField(default="")
     oauth = CharField(default="")
+    channel = CharField(default="")
+
+    def get_activated_modules(self):
+        return self.modules.select().where(ModuleConfiguration.activated == True)
 
 
 class ModuleConfiguration(Model):
