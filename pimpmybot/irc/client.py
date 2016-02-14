@@ -18,13 +18,16 @@ class Client(object):
     def __init__(self, pipe):
         self.pipe = pipe
         self.config = Configuration.get()
-        self.socket = socket.socket()
+        self.socket = None
         self.handlers = []
 
         self.load_modules()
 
     def connect(self):
-        self.socket.close()
+
+        if self.socket is not None:
+            self.socket.close()
+
         self.socket = socket.socket()
 
         if not self.config.oauth:
