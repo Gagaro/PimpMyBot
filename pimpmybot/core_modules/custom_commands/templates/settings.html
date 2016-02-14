@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block head_title %}Custom commands{% endblock %}
+{% block title %}Custom commands{% endblock %}
+
+{% block content %}
+{% if message %}
+<div class="alert alert-success">{{ message }}</div>
+{% endif %}
+
+<form action="{{ url('custom_commands:settings') }}" method="post" role="form">
+    <div class="panel panel-default">
+        <div class="panel-heading">Custom commands</div>
+        <div class="panel-body">
+            TODO
+
+            <input class="btn btn-primary" type="submit" value="Save" />
+        </div>
+    </div>
+</form>
+{% endblock %}

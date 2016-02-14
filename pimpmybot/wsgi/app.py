@@ -3,13 +3,10 @@ import os
 
 from bottle import TEMPLATE_PATH, Bottle, debug
 
-from common.modules import modules
-from irc.client import run as irc_run
-
 # Bottle configuration
 debug(True)
 BASE_DIR = os.path.dirname(__file__)
-TEMPLATE_PATH[:] = [os.path.join(BASE_DIR, 'templates')]
+TEMPLATE_PATH.append(os.path.join(BASE_DIR, 'templates'))
 
 
 class App(Bottle):
@@ -29,6 +26,8 @@ class App(Bottle):
         return self.irc_process is not None and self.irc_process.is_alive()
 
     def restart_irc_bot(self):
+        from irc.client import run as irc_run
+
         if self.irc_pipe is not None:
             self.irc_pipe.close()
         if self.pipe is not None:

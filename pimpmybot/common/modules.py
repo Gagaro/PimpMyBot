@@ -28,6 +28,46 @@ class BaseModule(object):
     _config = None
 
     @property
+    def menus(self):
+        """
+        Menus of this module.
+        Should be a list such as the following:
+
+        [
+            {
+                "title": "My module menu",
+                "icon": "list",  # Fontawesome icon name: http://fortawesome.github.io/Font-Awesome/icons/
+                "menu": [
+                    {
+                        "title": "My module page",
+                        "view": "my_module_page"  # Bottle view name
+                    },
+                    {
+                        "title": "My module other page",
+                        "view": "my_module_other_page"
+                    },
+                ]
+            },
+        ]
+        """
+        return []
+
+    @property
+    def dashboard(self):
+        """
+        Dashboard  panels of this moduel.
+        Should be a list such as the following:
+
+        [
+            {
+                "title": "My module dashboard",
+                "html": "<p>I am a paragraph</p>"
+            },
+        ]
+        """
+        return []
+
+    @property
     def config(self):
         if self._config is not None:
             return self._config
@@ -52,44 +92,6 @@ class BaseModule(object):
         self.config.installed = False
         self.config.save()
 
-    def get_menus(self):
-        """
-        Called by the web server to add menu.
-        Should return a list such as the following:
-
-        [
-            {
-                "title": "My module menu",
-                "icon": "list",  # Fontawesome icon name: http://fortawesome.github.io/Font-Awesome/icons/
-                "menu": [
-                    {
-                        "title": "My module page",
-                        "view": "my_module_page"  # Bottle view name
-                    },
-                    {
-                        "title": "My module other page",
-                        "view": "my_module_other_page"
-                    },
-                ]
-            },
-        ]
-        """
-        return []
-
-    def get_dashboard(self):
-        """
-        Called by the web server to add dashboard panels.
-        Should return a list such as the following:
-
-        [
-            {
-                "title": "My module dashboard",
-                "html": "<p>I am a paragraph</p>"
-            },
-        ]
-        """
-        return []
-
 
 def load_modules():
     """ Search through all modules directory and import the detected modules. """
@@ -103,9 +105,10 @@ def load_modules():
         sys.path = [path]
         for file in os.listdir(path):
             # Only try to import python file
-            if file[-3:] != '.py':
+            if file[-3:] != '.py' and not os.path.isdir('{0}/{1}'.format(path, file)):
                 continue
-            file = file[:-3]
+            if file[-3:] == '.py':
+                file = file[:-3]
             try:
                 module = __import__(file).module
             # except ImportError:

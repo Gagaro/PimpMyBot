@@ -1,23 +1,10 @@
 import os
 
-from bottle import (
-    Jinja2Template, jinja2_view, request, static_file
-)
+from bottle import jinja2_view, request, static_file
 
 from common.config import Configuration
 from wsgi import BASE_DIR, app
-from wsgi.modules import get_menu, get_dashboard
-
-
-# Jinja2 configuration
-Jinja2Template.settings = {
-    'autoescape': True,
-}
-Jinja2Template.defaults = {
-    'url': app.get_url,
-    'irc_bot_is_alive': app.is_bot_alive,
-    'menu': get_menu,
-}
+from wsgi.modules import get_dashboard
 
 route = app.route
 

@@ -1,6 +1,6 @@
 from common.modules import modules
 
-CORE_MODULES = ['ping']
+CORE_MODULES = ['ping', 'custom_commands']
 
 
 def install_core_modules():
