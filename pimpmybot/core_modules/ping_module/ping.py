@@ -1,5 +1,5 @@
+""" Import the Base Module, A module is part of the bot who manage some stuff """
 from common.modules import BaseModule
-
 
 def ping_handler(response, client):
     """ Handle the ping and send back a pong. """
@@ -15,6 +15,3 @@ class PingModule(BaseModule):
     description = "Send Pong in response to the Pings"
 
     handlers = [ping_handler]
-
-
-module = PingModule()
