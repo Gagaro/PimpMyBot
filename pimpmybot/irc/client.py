@@ -3,8 +3,8 @@ import socket
 
 import six
 
-from common.config import Configuration
-from common.logging import get_logger
+from utils.config import Configuration
+from utils.logging import get_logger
 
 logger = get_logger('irc', DEBUG)
 

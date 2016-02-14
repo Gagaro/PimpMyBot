@@ -2,7 +2,7 @@ import logging
 import os
 import sys
 
-from common.logging import get_logger
+from utils.logging import get_logger
 
 CORE_MODULES_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'core_modules')
 MODULES_PATHS = [CORE_MODULES_PATH]
@@ -72,7 +72,7 @@ class BaseModule(object):
         if self._config is not None:
             return self._config
 
-        from common.config import Configuration, ModuleConfiguration
+        from utils.config import Configuration, ModuleConfiguration
 
         configuration = Configuration.get()
         self._config = ModuleConfiguration.get_or_create(identifier=self.identifier, configuration=configuration)[0]

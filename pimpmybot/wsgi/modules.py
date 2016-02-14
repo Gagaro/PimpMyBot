@@ -1,4 +1,4 @@
-from common.config import Configuration
+from utils.config import Configuration
 
 
 def get_menu():

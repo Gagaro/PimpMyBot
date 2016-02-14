@@ -1,7 +1,7 @@
 from peewee import Model, CharField
 
-from common.modules import BaseModule
-from common import db
+from utils.modules import BaseModule
+from utils import db
 
 
 class Command(Model):

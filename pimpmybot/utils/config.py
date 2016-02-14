@@ -1,8 +1,8 @@
 from peewee import Model, CharField, BooleanField, ForeignKeyField
 
 from core_modules import install_core_modules
-from common import db
-from common.modules import modules
+from utils import db
+from utils.modules import modules
 
 
 class Configuration(Model):

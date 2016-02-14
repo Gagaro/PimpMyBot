@@ -2,7 +2,7 @@ import os
 
 from bottle import jinja2_view, request, static_file
 
-from common.config import Configuration
+from utils.config import Configuration
 from wsgi import BASE_DIR, app
 from wsgi.modules import get_dashboard
 

@@ -1,6 +1,6 @@
 from bottle import jinja2_view, request
 
-from common.modules import modules
+from utils.modules import modules
 from wsgi import app
 
 route = app.route

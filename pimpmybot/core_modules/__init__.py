@@ -1,4 +1,4 @@
-from common.modules import modules
+from utils.modules import modules
 
 CORE_MODULES = ['ping', 'custom_commands']
 
