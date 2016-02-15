@@ -87,7 +87,7 @@ class BaseModule(object):
 
     def uninstall(self):
         """ Method called when uninstalling the module. """
-        logger.debug('uninstalling module {0}'.format(self.id))
+        logger.debug('uninstalling module {0}'.format(self.identifier))
         self.config.activated = False
         self.config.installed = False
         self.config.save()
@@ -124,3 +124,11 @@ def load_modules():
     return modules
 
 modules = load_modules()
+
+
+def get_activated_modules():
+    return [module for module in modules.values() if module.config.activated]
+
+
+def get_deactivated_modules():
+    return [module for module in modules.values() if not module.config.activated]

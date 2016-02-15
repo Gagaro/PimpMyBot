@@ -8,29 +8,39 @@
 <div class="alert alert-success">{{ message }}</div>
 {% endif %}
 
-<form action="{{ url('configuration') }}" method="post" role="form">
-    {% if activated_modules %}
+<form action="{{ url('modules') }}" method="post" role="form">
     <div class="panel panel-default">
-        <div class="panel-heading">Activated modules</div>
+        <div class="panel-heading">Modules</div>
         <div class="panel-body">
-            {% for module in activated_modules %}
-            {{ module.identifier }}
-            {% endfor %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td>Activated</td>
+                        <td>Module</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for module in activated_modules %}
+                    <tr>
+                        <td><input type="checkbox" name="{{ module.identifier }}" checked /></td>
+                        <td>
+                            <strong>{{ module.title }}</strong> <small>{{ module.description }}</small>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% for module in deactivated_modules %}
+                    <tr>
+                        <td><input type="checkbox" name="{{ module.identifier }}" /></td>
+                        <td>
+                            <strong>{{ module.title }}</strong> <small>{{ module.description }}</small>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <input class="btn btn-primary" type="submit" value="Save" />
         </div>
     </div>
-    {% endif %}
-
-    {% if deactivated_modules %}
-    <div class="panel panel-default">
-        <div class="panel-heading">Deactivated modules</div>
-        <div class="panel-body">
-            {% for module in deactivated_modules %}
-            {{ module.identifier }}
-            {% endfor %}
-        </div>
-    </div>
-    {% endif %}
-
-    <input class="btn btn-primary" type="submit" value="Save" />
 </form>
 {% endblock %}
