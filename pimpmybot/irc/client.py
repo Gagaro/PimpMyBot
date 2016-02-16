@@ -5,6 +5,7 @@ import six
 
 from utils.config import Configuration
 from utils.logging import get_logger
+from utils.parser import parse_irc_response
 
 logger = get_logger('irc', DEBUG)
 
@@ -51,16 +52,18 @@ class Client(object):
     def run(self):
         while True:
             try:
-                response = self.socket.recv(1024).decode().strip()
+                response = self.socket.recv(1024).decode()
             except OSError:
                 # Socket is probably close, let's wait until it's connected
                 # FIXME Find a way to handle this cleanly
                 import time
                 time.sleep(5)
                 continue
-            if response:
-                logger.debug('< {0}'.format(response))
-                self.handle(response)
+            for line in response.split('\n'):
+                line = line.strip()
+                if line:
+                    logger.debug('< {0}'.format(line))
+                    self.handle(parse_irc_response(line))
 
     def load_modules(self):
         for module in self.config.get_activated_modules():

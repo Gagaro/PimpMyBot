@@ -1,10 +1,11 @@
 """ Import the Base Module, A module is part of the bot who manage some stuff """
 from utils.modules import BaseModule
 
+
 def ping_handler(response, client):
     """ Handle the ping and send back a pong. """
-    if response[:4] == 'PING':
-        client.send('PONG {0}'.format(response[5:]))
+    if response['command'] == 'PING':
+        client.send('PONG {0}'.format(response['parameters']))
         return True
 
 
