@@ -8,7 +8,7 @@ class Command(Model):
     class Meta:
         database = db
 
-    command = CharField()
+    command = CharField(unique=True)
     message = CharField()
 
 
