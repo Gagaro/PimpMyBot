@@ -78,10 +78,21 @@ class BaseModule(object):
         self._config = ModuleConfiguration.get_or_create(identifier=self.identifier, configuration=configuration)[0]
         return self._config
 
+    def activate(self):
+        logger.debug('activating module {0}'.format(self.identifier))
+        self.config.activated = True
+        self.config.save()
+        if not self.config.installed:
+            self.install()
+
+    def deactivate(self):
+        logger.debug('deactivating module {0}'.format(self.identifier))
+        self.config.activated = False
+        self.config.save()
+
     def install(self):
         """ Method called when activating the module for the first time. """
         logger.debug('installing module {0}'.format(self.identifier))
-        self.config.activated = True
         self.config.installed = True
         self.config.save()
 

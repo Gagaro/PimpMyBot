@@ -11,8 +11,9 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <td>Activated</td>
-                        <td>Module</td>
+                        <th>Activated</th>
+                        <th>Module</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -22,6 +23,7 @@
                         <td>
                             <strong>{{ module.title }}</strong> <small>{{ module.description }}</small>
                         </td>
+                        <td></td>
                     </tr>
                     {% endfor %}
                     {% for module in deactivated_modules %}
@@ -29,6 +31,14 @@
                         <td><input type="checkbox" name="{{ module.identifier }}" /></td>
                         <td>
                             <strong>{{ module.title }}</strong> <small>{{ module.description }}</small>
+                        </td>
+                        <td>
+                            {% if module.config.installed %}
+                            <button type="submit" class="btn btn-danger" title="Uninstall"
+                                    name="uninstall" value="{{ module.identifier }}">
+                                <i class="fa fa-fw fa-times"></i>
+                            </button>
+                            {% endif %}
                         </td>
                     </tr>
                     {% endfor %}
