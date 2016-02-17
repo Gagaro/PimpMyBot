@@ -4,10 +4,6 @@
 {% block title %}Modules{% endblock %}
 
 {% block content %}
-{% if message %}
-<div class="alert alert-success">{{ message }}</div>
-{% endif %}
-
 <form action="{{ url('modules') }}" method="post" role="form">
     <div class="panel panel-default">
         <div class="panel-heading">Modules</div>

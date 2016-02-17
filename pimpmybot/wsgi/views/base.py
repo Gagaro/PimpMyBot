@@ -4,6 +4,7 @@ from bottle import jinja2_view, request, static_file
 
 from utils.config import Configuration
 from wsgi import BASE_DIR, app
+from wsgi.messages import success
 from wsgi.modules import get_dashboard
 
 route = app.route
@@ -44,8 +45,8 @@ def configuration_view_post():
     configuration.username = request.forms['username']
     configuration.oauth = request.forms['oauth']
     configuration.save()
+    success('Configuration saved')
     return {
-        'message': 'Configuration saved',
         'config': configuration
     }
 

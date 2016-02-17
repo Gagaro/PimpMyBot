@@ -17,10 +17,18 @@ class App(Bottle):
         self.irc_pipe = None
         self.pipe = None
         self.irc_process = None
+        self._messages = []
 
     def run(self):
         self.restart_irc_bot()
         super(App, self).run()
+
+    def get_messages(self):
+        while self._messages:
+            yield self._messages.pop()
+
+    def add_message(self, message):
+        self._messages.append(message)
 
     def is_bot_alive(self):
         return self.irc_process is not None and self.irc_process.is_alive()

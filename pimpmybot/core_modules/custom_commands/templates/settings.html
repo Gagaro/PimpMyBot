@@ -4,10 +4,6 @@
 {% block title %}Custom commands{% endblock %}
 
 {% block content %}
-{% if message %}
-<div class="alert alert-success">{{ message }}</div>
-{% endif %}
-
 <form action="{{ url('custom_commands:settings') }}" method="post" role="form">
     <div class="panel panel-default">
         <div class="panel-heading">Custom commands</div>

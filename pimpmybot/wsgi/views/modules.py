@@ -2,6 +2,7 @@ from bottle import jinja2_view, request
 
 from utils.modules import modules, get_activated_modules, get_deactivated_modules
 from wsgi import app
+from wsgi.messages import success
 
 route = app.route
 
@@ -18,7 +19,6 @@ def modules_view():
 @route('/modules', name='modules', method='POST')
 @jinja2_view('modules')
 def modules_view_post():
-    message = ''
     activated_modules = set([module.identifier for module in get_activated_modules()])
     deactivated_modules = set([module.identifier for module in get_deactivated_modules()])
 
@@ -32,9 +32,8 @@ def modules_view_post():
         modules[identifier].uninstall()
 
     if to_activate or to_deactivate:
-        message = 'Module changed successfully.'
+        success('Module changed successfully.')
     return {
-        'message': message,
         'activated_modules': get_activated_modules(),
         'deactivated_modules': get_deactivated_modules()
     }

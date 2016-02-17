@@ -11,6 +11,7 @@ Jinja2Template.defaults = {
     'request': request,
     'url': app.get_url,
     'irc_bot_is_alive': app.is_bot_alive,
+    'get_messages': app.get_messages,
     'menu': get_menu,
 }
 
