@@ -5,46 +5,50 @@ RESPONSE_RE = re.compile('^(?:(?P<tags>@[^ ]+) )?(?::(?P<from>[^ ]+) )?(?P<comma
 PRIVMSG_RE = re.compile('^(?P<target>#?\w+) :(?P<message>.*)$')
 
 
-def parse_privmsg(response):
+class Response(object):
     """
-    Return a dict with the target, the message and the command if there is one.
+    Class responsible for the parsing of the irc response.
     """
-    data = PRIVMSG_RE.match(response['parameters']).groupdict()
-    if data['message'][0] == '!':
-        data['command'] = data['message'][1:].split(' ', 1)[0]
-    else:
-        data['command'] = None
-    return data
 
+    __slots__ = ['tags', 'response_from', 'command', 'parameters', '_data']
 
-# Command to callback method parsing data from the parameters
-GET_COMMAND_DATA = {
-    'PRIVMSG': parse_privmsg,
-}
+    def __init__(self, response):
+        response = RESPONSE_RE.match(response).groupdict()
+        self.tags = response['tags']
+        self.response_from = response['from']
+        self.command = response['command']
+        self.parameters = response['parameters']
+        self._data = None
 
+    @property
+    def data(self):
+        """ Data is calculated only if needed and only once. """
+        if self._data is None and self.command in self.GET_COMMAND_DATA.keys():
+            self._data = self.GET_COMMAND_DATA[self.command](self)
+        return self._data
 
-def parse_irc_response(response_string):
-    """
-    Parse the irc response and return a dict.
+    def _parse_privmsg(self):
+        """
+        Return a dict with the target, the message and the command if there is one.
 
-    `parameters` is the raw string after the command.
-    `data` is parsed data from the `parameters` string depending on the `command`.
+        :example:
 
-    :example
-    {
-        'tags': {
-            'color': '#0D4200',
-        },
-        'from': 'twitch_username!twitch_username@twitch_username.tmi.twitch.tv',
-        'command': 'PRIVMSG',
-        'parameters': '#channel :Kappa Keepo Kappa',
-        'data': {
+        PRIVMSG #channel :!test a message
+
+        {
             'target': '#channel',
-            'message': 'Kappa Keepo Kappa',
+            'message': '!test a message',
+            'command': 'test',
         }
+        """
+        data = PRIVMSG_RE.match(self.parameters).groupdict()
+        if data['message'][0] == '!':
+            data['command'] = data['message'][1:].split(' ', 1)[0]
+        else:
+            data['command'] = None
+        return data
+
+    # Command to callback method parsing data
+    GET_COMMAND_DATA = {
+        'PRIVMSG': _parse_privmsg,
     }
-    """
-    response = RESPONSE_RE.match(response_string).groupdict()
-    if response['command'] in GET_COMMAND_DATA.keys():
-        response['data'] = GET_COMMAND_DATA[response['command']](response)
-    return response

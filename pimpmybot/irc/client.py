@@ -5,7 +5,7 @@ import six
 
 from utils.config import Configuration
 from utils.logging import get_logger
-from utils.parser import parse_irc_response
+from utils.parser import Response
 
 logger = get_logger('irc', DEBUG)
 
@@ -63,7 +63,7 @@ class Client(object):
                 line = line.strip()
                 if line:
                     logger.debug('< {0}'.format(line))
-                    self.handle(parse_irc_response(line))
+                    self.handle(Response(line))
 
     def load_modules(self):
         for module in self.config.get_activated_modules():

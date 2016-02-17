@@ -4,8 +4,8 @@ from utils.modules import BaseModule
 
 def ping_handler(response, client):
     """ Handle the ping and send back a pong. """
-    if response['command'] == 'PING':
-        client.send('PONG {0}'.format(response['parameters']))
+    if response.command == 'PING':
+        client.send('PONG {0}'.format(response.parameters))
         return True
 
 
