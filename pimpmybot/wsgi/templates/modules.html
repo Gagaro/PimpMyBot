@@ -3,6 +3,15 @@
 {% block head_title %}Modules{% endblock %}
 {% block title %}Modules{% endblock %}
 
+{% macro show_dependency(identifier) -%}
+    {% set module = modules.get(identifier, None) -%}
+    {% if module is none -%}
+    <span class="text-danger">{{ identifier }}</span>
+    {% else -%}
+    <span class="text-{{'success' if module.config.activated else 'danger' }}">{{ module.title }}</span>
+    {%- endif %}
+{%- endmacro %}
+
 {% block content %}
 <form action="{{ url('modules') }}" method="post" role="form">
     <div class="panel panel-default">
@@ -13,27 +22,20 @@
                     <tr>
                         <th>Activated</th>
                         <th>Module</th>
+                        <th>Dependencies</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for module in activated_modules %}
+                    {% for module in modules.values() | sort(attribute='config.activated', reverse=True) %}
                     <tr>
-                        <td><input type="checkbox" name="{{ module.identifier }}" checked /></td>
+                        <td><input type="checkbox" name="{{ module.identifier }}" {{ 'checked' if module.config.activated }} /></td>
                         <td>
                             <strong>{{ module.title }}</strong> <small>{{ module.description }}</small>
                         </td>
-                        <td></td>
-                    </tr>
-                    {% endfor %}
-                    {% for module in deactivated_modules %}
-                    <tr>
-                        <td><input type="checkbox" name="{{ module.identifier }}" /></td>
+                        <td>{% for identifier in module.dependencies %}{{ show_dependency(identifier) }}{{ ', ' if not loop.last }}{% endfor %}</td>
                         <td>
-                            <strong>{{ module.title }}</strong> <small>{{ module.description }}</small>
-                        </td>
-                        <td>
-                            {% if module.config.installed %}
+                            {% if not module.config.activated and module.config.installed %}
                             <button type="submit" class="btn btn-danger" title="Uninstall"
                                     name="uninstall" value="{{ module.identifier }}">
                                 <i class="fa fa-fw fa-times"></i>

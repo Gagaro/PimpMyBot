@@ -18,11 +18,13 @@ class BaseModule(object):
         id          Unique identifier for this module
         title       Title of the app
         description Description of the app
+        dependencies    List of other module needed for this one to work.
         handlers    List of irc handlers
     """
     identifier = ''
     title = ''
     description = ''
+    dependencies = []
     handlers = []
 
     _config = None

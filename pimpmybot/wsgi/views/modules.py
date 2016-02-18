@@ -12,8 +12,7 @@ route = app.route
 @jinja2_view('modules')
 def modules_view():
     return {
-        'activated_modules': get_activated_modules(),
-        'deactivated_modules': get_deactivated_modules()
+        'modules': modules,
     }
 
 
@@ -43,6 +42,5 @@ def modules_view_post():
         if to_activate or to_deactivate:
             success('Module changed successfully.')
     return {
-        'activated_modules': get_activated_modules(),
-        'deactivated_modules': get_deactivated_modules()
+        'modules': modules,
     }
