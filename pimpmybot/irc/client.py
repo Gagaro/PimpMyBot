@@ -37,11 +37,15 @@ class Client(object):
         if not self.config.username:
             logger.warning('No username configured.')
             return
+        if not self.config.channel:
+            logger.warning('No channel configured.')
+            return
 
         logger.debug('Connecting to {0}:{1}'.format(HOST, PORT))
         self.socket.connect((HOST, PORT))
         self.send('PASS {0}\r\n'.format(self.config.oauth))
         self.send('NICK {0}\r\n'.format(self.config.username))
+        self.send('JOIN {0}\r\n'.format('#' + self.config.channel))
 
     def send(self, message):
         logger.debug('> {0}'.format(message))

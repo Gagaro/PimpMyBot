@@ -44,6 +44,7 @@ def configuration_view_post():
     configuration = Configuration.get()
     configuration.username = request.forms['username']
     configuration.oauth = request.forms['oauth']
+    configuration.channel = request.forms['channel']
     configuration.save()
     success('Configuration saved')
     return {
