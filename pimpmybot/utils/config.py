@@ -1,4 +1,4 @@
-from peewee import Model, CharField, BooleanField, ForeignKeyField
+from peewee import Model, CharField, BooleanField, ForeignKeyField, IntegerField
 
 from core_modules import install_core_modules
 from utils import db
@@ -30,9 +30,18 @@ class ModuleConfiguration(Model):
         return modules[self.identifier]
 
 
+class DashboardConfiguration(Model):
+    class Meta:
+        database = db
+
+    identifier = CharField()
+    order = IntegerField(default=0)
+    column = CharField(default=None, null=True)
+
+
 if 'configuration' not in db.get_tables():
     # The database has not been created yet, let's do it.
-    db.create_tables([Configuration, ModuleConfiguration])
+    db.create_tables([Configuration, ModuleConfiguration, DashboardConfiguration])
     Configuration.create()
     install_core_modules()
 db.close()

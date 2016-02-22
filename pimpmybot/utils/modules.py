@@ -55,19 +55,19 @@ class BaseModule(object):
         return []
 
     @property
-    def dashboard(self):
+    def dashboards(self):
         """
         Dashboard  panels of this moduel.
-        Should be a list such as the following:
+        Should be a dict such as the following:
 
-        [
-            {
+        {
+            'id_of_dashboard': {
                 "title": "My module dashboard",
                 "html": "<p>I am a paragraph</p>"
             },
-        ]
+        }
         """
-        return []
+        return {}
 
     @property
     def config(self):
