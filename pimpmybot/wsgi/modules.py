@@ -1,3 +1,4 @@
+from operator import attrgetter
 from utils.config import Configuration, DashboardConfiguration
 
 
@@ -26,4 +27,6 @@ def get_dashboard():
                 dashboards[config.column].append(dashboard)
             else:
                 dashboards['deactivated'].append(dashboard)
+    for column, dashboards_list in dashboards.items():
+        dashboards[column] = sorted(dashboards_list, key=lambda d: d['config'].order)
     return dashboards

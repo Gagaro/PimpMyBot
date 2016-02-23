@@ -37,7 +37,7 @@ class CustomCommandModule(BaseModule):
             'custom_commands': {
                 'title': 'Custom commands',
                 'html': '<strong>TODO</strong>'
-            }
+            },
         }
 
     def install(self):
