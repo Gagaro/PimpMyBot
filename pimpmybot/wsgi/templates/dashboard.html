@@ -3,6 +3,55 @@
 {% block head_title %}Dashboard{% endblock %}
 {% block title %}Dashboard{% endblock %}
 
+{% block css %}
+<!-- Dragula CSS -->
+<link href="/static/bower_components/dragula.js/dist/dragula.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block js %}
+<!-- Dragula JavaScript -->
+<script src="/static/bower_components/dragula.js/dist/dragula.min.js"></script>
+
+<!-- Dashboard JavaScript -->
+<script src="/static/js/dashboard.js"></script>
+{% endblock %}
+
+{% macro render_dashboard(dashboard) %}
+<div class="panel panel-default dashboard" data-identifier="{{ dashboard['identifier'] }}">
+    <div class="panel-heading">{{ dashboard['title'] }}</div>
+    <div class="panel-body">
+        {{ dashboard['html'] | safe }}
+    </div>
+</div>
+{% endmacro %}
+
 {% block content %}
-    {{ dashboard }}
+<div id="dashboard">
+    <div class="row">
+        <div class="col-md-1">
+            <button class="btn btn-default" id="edit-dashboard" data-toggle="collapse" data-target="#collapse-dashboard" aria-expanded="false" aria-controls="deactivated">
+                <i class="fa fa-fw fa-pencil"></i>
+            </button>
+            <button class="btn btn-success soft-hide" id="validate-dashboard" data-toggle="collapse" data-target="#collapse-dashboard" aria-expanded="false" aria-controls="deactivated">
+                <i class="fa fa-fw fa-check"></i>
+            </button>
+        </div>
+        <div class="col-md-11 collapse" id="collapse-dashboard">
+            <div class="container" id="deactivated">
+                {% for dashboard in dashboards['deactivated'] %}{{ render_dashboard(dashboard) }}{% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 container" id="left">
+            {% for dashboard in dashboards['left'] %}{{ render_dashboard(dashboard) }}{% endfor %}
+        </div>
+        <div class="col-md-4 container" id="middle">
+            {% for dashboard in dashboards['middle'] %}{{ render_dashboard(dashboard) }}{% endfor %}
+        </div>
+        <div class="col-md-4 container" id="right">
+            {% for dashboard in dashboards['right'] %}{{ render_dashboard(dashboard) }}{% endfor %}
+        </div>
+    </div>
+</div>
 {% endblock %}

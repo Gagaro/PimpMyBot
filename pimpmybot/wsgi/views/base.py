@@ -5,7 +5,6 @@ from bottle import jinja2_view, request, static_file, redirect
 from utils.config import Configuration
 from wsgi import BASE_DIR, app
 from wsgi.messages import success
-from wsgi.modules import get_dashboard
 
 route = app.route
 
@@ -13,14 +12,6 @@ route = app.route
 @route('/', name='index')
 def index_view():
     return redirect(app.get_url('dashboard'))
-
-
-@route('/dashboard', name='dashboard')
-@jinja2_view('dashboard')
-def dashboard_view():
-    return {
-        'dashboard': get_dashboard()
-    }
 
 
 @route('/status', name='status')

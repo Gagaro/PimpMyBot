@@ -31,6 +31,15 @@ class CustomCommandModule(BaseModule):
         "view": "custom_commands:settings"
     }]
 
+    @property
+    def dashboards(self):
+        return {
+            'custom_commands': {
+                'title': 'Custom commands',
+                'html': '<strong>TODO</strong>'
+            }
+        }
+
     def install(self):
         super(CustomCommandModule, self).install()
         db.create_tables([Command])

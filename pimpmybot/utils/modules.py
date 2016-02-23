@@ -95,13 +95,14 @@ class BaseModule(object):
     def install(self):
         """ Method called when activating the module for the first time. """
         logger.debug('installing module {0}'.format(self.identifier))
+        assert self.config.activated
         self.config.installed = True
         self.config.save()
 
     def uninstall(self):
         """ Method called when uninstalling the module. """
         logger.debug('uninstalling module {0}'.format(self.identifier))
-        self.config.activated = False
+        assert not self.config.activated
         self.config.installed = False
         self.config.save()
 
