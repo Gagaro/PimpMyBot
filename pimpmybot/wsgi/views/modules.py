@@ -3,6 +3,7 @@ from bottle import jinja2_view, request
 from utils.config import ModuleConfiguration
 from utils.modules import modules, get_activated_modules, get_deactivated_modules
 from wsgi import app
+from wsgi.csrf import csrf_protect, csrf_token
 from wsgi.messages import success, danger
 
 route = app.route
@@ -10,6 +11,7 @@ route = app.route
 
 @route('/modules', name='modules')
 @jinja2_view('modules')
+@csrf_token
 def modules_view():
     return {
         'modules': modules,
@@ -18,6 +20,7 @@ def modules_view():
 
 @route('/modules', name='modules', method='POST')
 @jinja2_view('modules')
+@csrf_protect
 def modules_view_post():
     if 'uninstall' in request.forms.keys():
         module = ModuleConfiguration.get(ModuleConfiguration.identifier == request.forms['uninstall'])

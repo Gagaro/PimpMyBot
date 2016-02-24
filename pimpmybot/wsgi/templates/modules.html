@@ -14,6 +14,7 @@
 
 {% block content %}
 <form action="{{ url('modules') }}" method="post" role="form">
+    {{ csrf_tag() }}
     <div class="panel panel-default">
         <div class="panel-heading">Modules</div>
         <div class="panel-body">

@@ -13,13 +13,15 @@
             {% else %}
                 {% for command in commands %}
                 <div class="form-group">
-                    <div class="input-group btn-group">
-                        <div class="input-group-addon"><i class="fa fa-fw fa-exclamation"></i></div>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-fw fa-exclamation"></i></span>
                         <input type="text" class="form-control" name="command-{{ command.id }}" value="{{ request.forms.get('command-{0}'.format(command.id), command.command) }}">
-                        <div class="input-group-addon"><i class="fa fa-fw fa-comment"></i></div>
+                        <span class="input-group-addon"><i class="fa fa-fw fa-comment"></i></span>
                         <input type="text" class="form-control" name="message-{{ command.id }}" value="{{ request.forms.get('message-{0}'.format(command.id), command.command) }}">
-                        <span class="input-group-btn"><button type="submit" class="btn btn-success" name="update" value="{{ command.id }}"><i class="fa fa-fw fa-pencil"></i></button></span>
-                        <span class="input-group-btn"><button type="submit" class="btn btn-danger" name="delete" value="{{ command.id }}"><i class="fa fa-fw fa-times"></i></button></span>
+                        <div class="input-group-btn">
+                            <button type="submit" class="btn btn-success" name="update" value="{{ command.id }}"><i class="fa fa-fw fa-pencil"></i></button>
+                            <button type="submit" class="btn btn-danger" name="delete" value="{{ command.id }}"><i class="fa fa-fw fa-times"></i></button>
+                        </div>
                     </div>
                 </div>
                 {% endfor %}

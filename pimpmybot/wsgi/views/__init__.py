@@ -1,6 +1,7 @@
 from bottle import Jinja2Template, request
 
 from wsgi import app
+from wsgi.csrf import csrf_tag
 from wsgi.modules import get_menu
 
 # Jinja2 configuration
@@ -13,6 +14,7 @@ Jinja2Template.defaults = {
     'irc_bot_is_alive': app.is_bot_alive,
     'get_messages': app.get_messages,
     'menu': get_menu,
+    'csrf_tag': csrf_tag,
 }
 
 

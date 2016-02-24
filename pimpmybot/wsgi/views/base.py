@@ -4,6 +4,7 @@ from bottle import jinja2_view, request, static_file, redirect
 
 from utils.config import Configuration
 from wsgi import BASE_DIR, app
+from wsgi.csrf import csrf_protect, csrf_token
 from wsgi.messages import success
 
 route = app.route
@@ -30,12 +31,14 @@ def status_view_post():
 
 @route('/configuration', name='configuration')
 @jinja2_view('configuration')
+@csrf_token
 def configuration_view():
     return {'config': Configuration.get()}
 
 
 @route('/configuration', name='configuration', method="POST")
 @jinja2_view('configuration')
+@csrf_protect
 def configuration_view_post():
     configuration = Configuration.get()
     configuration.username = request.forms['username']

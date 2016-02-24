@@ -4,6 +4,7 @@ from bottle import jinja2_view, HTTPResponse, request
 
 from utils.config import DashboardConfiguration
 from wsgi import app
+from wsgi.csrf import csrf_protect, csrf_token
 from wsgi.modules import get_dashboard
 
 route = app.route
@@ -11,6 +12,7 @@ route = app.route
 
 @route('/dashboard', name='dashboard')
 @jinja2_view('dashboard')
+@csrf_token
 def dashboard_view():
     return {
         'dashboards': get_dashboard()
@@ -18,6 +20,7 @@ def dashboard_view():
 
 
 @route('/dashboard', name='dashboard', method='POST')
+@csrf_protect
 def dashboard_ajax_post_view():
     data = json.loads(request.forms['data'])
     for column in ['deactivated', 'left', 'middle', 'right']:
