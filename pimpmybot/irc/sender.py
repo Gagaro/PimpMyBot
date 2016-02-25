@@ -43,7 +43,7 @@ class Sender(object):
 
         #can't send message because of mess limit
         if self.nb_send_since_reset >= MAX_MESSAGE:
-                return
+            return
 
         #send all mess in the buffer with
         for mess in self.buffer[:]:
