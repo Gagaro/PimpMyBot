@@ -1,4 +1,5 @@
 import time
+
 import six
 
 from utils.logging import get_logger
@@ -6,78 +7,76 @@ from logging import DEBUG
 
 logger = get_logger('irc_sender', DEBUG)
 
+# Max message per window
 MAX_MESSAGE = 20
-PER_X_SECONDS = 30
+# Moderators can send 100 message per 30 seconds
+MAX_MESSAGE_MOD = 100
+# In seconds
+WINDOW_SIZE = 30
+
 
 class Sender(object):
-
-    def __init__(self):
-        self.is_active = False
-        self.irc_client = None
-        self.channel = None
+    def __init__(self, channel):
+        self.channel = channel
         self.buffer = []
-        self.last_reset = time.time() #just for init (time in sec)
-        self.nb_send_since_reset = 0
+        self.sent = {}
 
-    def configure(self, irc_client):
-        if irc_client is None:
-            logger.debug('ERROR - irc_client is null, sender configuration abort')
-            return
-        elif irc_client.socket is None:
-            logger.debug('ERROR - irc_client not connected, sender configuration abort')
-            return
+    # Handlers which generate the raw messages
 
-        self.is_active = True
-        self.irc_client = irc_client
-        self.channel = irc_client.config.channel
+    def raw(self, message, **kwargs):
+        return message
 
-    def send_list(self):
-        if len(self.buffer) <= 0:
-            return
-        #each X seconds, reset counter
-        timeElapsed = time.time() - self.last_reset
-        if timeElapsed >= PER_X_SECONDS:
-            self.nb_send_since_reset = 0
-            timeElapsed = 0
-            self.last_reset = time.time()
+    def who(self, message, **kwargs):
+        return 'WHO #{0}'.format(self.channel)
 
-        #can't send message because of mess limit
-        if self.nb_send_since_reset >= MAX_MESSAGE:
-            return
+    def join(self, message, **kwargs):
+        return 'JOIN #{0}'.format(self.channel)
 
-        #send all mess in the buffer with
-        for mess in self.buffer[:]:
-            if  self.nb_send_since_reset < MAX_MESSAGE:
-                self.nb_send_since_reset = self.nb_send_since_reset + 1
-                self.send(mess)
-                self.buffer.remove(mess)
+    def part(self, message, **kwargs):
+        return 'PART #{0}'.format(self.channel)
 
-    def send(self,message):
+    def privmsg(self, message, **kwargs):
+        return 'PRIVMSG #{0} :{1}'.format(self.channel, message)
+
+    def send(self, socket, type, message):
         """
-        Send a raw message to the IRC channel.
+        Prepare the message, add it to the buffer and try to send it.
         """
-        if self.is_active:
-            logger.debug('> {0}'.format(message))
-            if isinstance(message, six.text_type):
-                message = message.encode('utf8')
-            if message[-2:] != b'\r\n':
-                message = message + b'\r\n'
-            self.irc_client.socket.send(message)
-        else:
-             logger.debug('WARNING - irc_sender is not active')
+        if type not in ['raw', 'who', 'join', 'part', 'privmsg']:
+            logger.warning('Unknown type: "{0}"'.format(type))
+            return
+        message = getattr(self, type)(message)
+        logger.debug('> {0}'.format(message))
+        if isinstance(message, six.text_type):
+            message = message.encode('utf8')
+        if message[-2:] != b'\r\n':
+            message = message + b'\r\n'
+        self.buffer.append(message)
+        self.send_buffer(socket)
 
-    def raw(self, raw_message):
-        self.buffer.append(raw_message)
+    def send_buffer(self, socket):
+        """"
+        Try to send all message in buffer without sending too much.
+        """
+        if not self.buffer:
+            return
 
-    def who(self):
-        self.buffer.append('WHO #{0}'.format(self.irc_client.config.channel))
+        # Update
+        current_window = int(time.time()) - WINDOW_SIZE
+        self.sent = {
+            msg_time: count
+            for msg_time, count in self.sent.items()
+            if msg_time >= current_window
+        }
+        messages_allowed = MAX_MESSAGE - sum(self.sent.values())  # TODO Test if the bot is mod or not
 
-    def join(self):
-        self.buffer.append('JOIN #{0}'.format(self.irc_client.config.channel))
+        while self.buffer and messages_allowed > 0:
+            # Update current messages count
+            current_time = int(time.time())
+            current_sent = self.sent.setdefault(current_time, 0)
+            self.sent[current_time] = current_sent + 1
 
-    def part(self):
-        self.buffer.append('PART #{0}'.format(self.irc_client.config.channel))
-
-    def msg(self, msg):
-        self.buffer.append('PRIVMSG #{0} :{1}'.format(self.irc_client.config.channel, msg))
-
+            # Send message
+            messages_allowed -= 1
+            message = self.buffer.pop(0)
+            socket.send(message)

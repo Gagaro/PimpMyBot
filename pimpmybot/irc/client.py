@@ -3,9 +3,9 @@ import socket
 
 import six
 
+from irc.sender import Sender
 from utils.config import Configuration
 from utils.logging import get_logger
-from irc.sender import Sender
 from utils.parser import Response
 
 
@@ -23,30 +23,25 @@ def handle_connexion(response, client):
     if response.command != '001':
         return
 
-    client.send('join',None)
-    client.send('raw','CAP REQ :twitch.tv/membership')
-    client.send('raw','CAP REQ :twitch.tv/commands')
-    client.send('raw','CAP REQ :twitch.tv/tags')
+    client.send(None, type='join')
+    client.send('CAP REQ :twitch.tv/membership', type='raw')
+    client.send('CAP REQ :twitch.tv/commands', type='raw')
+    client.send('CAP REQ :twitch.tv/tags', type='raw')
     client.remove_handler(handle_connexion)
 
 
 class Client(object):
     """ Connect to IRC and dispatch the messages to the handlers. """
+
     def __init__(self, pipe):
         self.pipe = pipe
         self.config = Configuration.get()
         self.socket = None
         self.handlers = []
-        self.sender = Sender()
+        self.sender = Sender(self.config.channel)
         self.load_modules()
 
     def connect(self):
-
-        if self.socket is not None:
-            self.socket.close()
-
-        self.socket = socket.socket()
-
         if not self.config.oauth:
             logger.warning('No oauth token configured.')
             return
@@ -57,33 +52,30 @@ class Client(object):
             logger.warning('No channel configured.')
             return
 
+        if self.socket is not None:
+            self.socket.close()
+
+        self.socket = socket.socket()
         logger.debug('Connecting to {0}:{1}'.format(HOST, PORT))
         self.add_handler(handle_connexion)
         self.socket.connect((HOST, PORT))
-        self.sender.configure(self)
-        self.send('raw','PASS {0}'.format(self.config.oauth))
-        self.send('raw','NICK {0}'.format(self.config.username))
+        self.send('PASS {0}'.format(self.config.oauth), type='raw')
+        self.send('NICK {0}'.format(self.config.username), type='raw')
 
+    def send(self, message, type='privmsg'):
+        self.sender.send(self.socket, type, message)
 
-    def send(self, type, message):
-        if type == 'raw':
-            self.sender.raw(message)
-        elif type == 'who':
-            self.sender.who()
-        elif type == 'join':
-            self.sender.join()
-        elif type == 'part':
-            self.sender.part()
-        elif type == 'msg':
-            self.sender.msg(message)
-        else:
-            logger.warning('Sending type doesn\'t exist :{0}'.format(type))
+    def send_buffer(self):
+        """ Send message if we have some buffered. """
+        # Test socket to avoid race condition
+        if self.socket is not None:
+            self.sender.send_buffer(self.socket)
 
     def run(self):
         while True:
-            self.manage_sender()
+            self.send_buffer()
             try:
-                response=self.socket.recv(1024).decode()
+                response = self.socket.recv(1024).decode()
             except OSError:
                 # Socket is probably close, let's wait until it's connected
                 # FIXME Find a way to handle this cleanly
@@ -95,11 +87,6 @@ class Client(object):
                 if line:
                      logger.debug('< {0}'.format(line))
                      self.handle(Response(line))
-
-    def manage_sender(self):
-       if self.sender is None:
-           return
-       self.sender.send_list()
 
     def load_modules(self):
         for module in self.config.get_activated_modules():
