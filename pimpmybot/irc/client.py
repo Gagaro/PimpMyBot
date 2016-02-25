@@ -5,7 +5,9 @@ import six
 
 from utils.config import Configuration
 from utils.logging import get_logger
+from irc.sender import Sender
 from utils.parser import Response
+
 
 logger = get_logger('irc', DEBUG)
 
@@ -21,11 +23,10 @@ def handle_connexion(response, client):
     if response.command != '001':
         return
 
-    client.send('JOIN #{0}\r\n'.format(client.config.channel))
-    logger.debug('Activate twitch capabilities')
-    client.send('CAP REQ :twitch.tv/membership')
-    client.send('CAP REQ :twitch.tv/commands')
-    client.send('CAP REQ :twitch.tv/tags')
+    self.send('join',None)
+    self.send('raw','CAP REQ :twitch.tv/membership')
+    self.send('raw','CAP REQ :twitch.tv/commands')
+    self.send('raw','CAP REQ :twitch.tv/tags')
     client.remove_handler(handle_connexion)
 
 
@@ -36,7 +37,7 @@ class Client(object):
         self.config = Configuration.get()
         self.socket = None
         self.handlers = []
-
+        self.sender = Sender()
         self.load_modules()
 
     def connect(self):
@@ -57,34 +58,48 @@ class Client(object):
             return
 
         logger.debug('Connecting to {0}:{1}'.format(HOST, PORT))
-        self.socket.connect((HOST, PORT))
-        self.send('PASS {0}\r\n'.format(self.config.oauth))
-        self.send('NICK {0}\r\n'.format(self.config.username))
         self.add_handler(handle_connexion)
+        self.socket.connect((HOST, PORT))
+        self.sender.configure(self)
+        self.send('raw','PASS {0}'.format(self.config.oauth))
+        self.send('raw','NICK {0}'.format(self.config.username))
 
-    def send(self, message):
-        logger.debug('> {0}'.format(message))
-        if isinstance(message, six.text_type):
-            message = message.encode('utf8')
-        if message[-2:] != b'\r\n':
-            message = message + b'\r\n'
-        self.socket.send(message)
+
+    def send(self, type, message):
+        if type == 'raw':
+            self.sender.raw(message)
+        elif type == 'who':
+            self.sender.who()
+        elif type == 'join':
+            self.sender.join()
+        elif type == 'part':
+            self.sender.part()
+        elif type == 'msg':
+            self.sender.msg(message)
+        else:
+            logger.warning('Sending type doesn\'t exist :{0}'.format(type))
 
     def run(self):
         while True:
+            self.manage_sender()
             try:
-                response = self.socket.recv(1024).decode()
+                response=self.socket.recv(1024).decode()
             except OSError:
                 # Socket is probably close, let's wait until it's connected
                 # FIXME Find a way to handle this cleanly
                 import time
                 time.sleep(5)
                 continue
-            for line in response.split('\n'):
-                line = line.strip()
-                if line:
-                    logger.debug('< {0}'.format(line))
-                    self.handle(Response(line))
+                for line in response.split('\n'):
+                    line = line.strip()
+                    if line:
+                        logger.debug('< {0}'.format(line))
+                        self.handle(Response(line))
+
+    def manage_sender(self):
+       if self.sender is None:
+           return
+       self.sender.send_list()
 
     def load_modules(self):
         for module in self.config.get_activated_modules():
