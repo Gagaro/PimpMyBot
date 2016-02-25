@@ -62,7 +62,7 @@ class Client(object):
         logger.debug('Active twitch capabilities')
         client.send('CAP REQ :twitch.tv/membership')
         client.send('CAP REQ :twitch.tv/commands')
-       # client.send('PRIVMSG #ikev17 :ceci est un test')
+        # client.send('PRIVMSG #ikev17 :ceci est un test')
         self.remove_handler(self.active_twitch_capabilities)
 
 
@@ -70,6 +70,8 @@ class Client(object):
         logger.debug('> {0}'.format(message))
         if isinstance(message, six.text_type):
             message = message.encode('utf8')
+        if message[-2:] != b'\r\n':
+            message = message + b'\r\n'
         self.socket.send(message)
 
     def run(self):
