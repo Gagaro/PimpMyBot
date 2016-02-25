@@ -14,6 +14,21 @@ HOST = 'irc.twitch.tv'
 PORT = 6667
 
 
+def handle_connexion(response, client):
+    """
+    Activate twitch capabilities and join channel.
+    """
+    if response.command != '001':
+        return
+
+    client.send('JOIN #{0}\r\n'.format(client.config.channel))
+    logger.debug('Activate twitch capabilities')
+    client.send('CAP REQ :twitch.tv/membership')
+    client.send('CAP REQ :twitch.tv/commands')
+    client.send('CAP REQ :twitch.tv/tags')
+    client.remove_handler(handle_connexion)
+
+
 class Client(object):
     """ Connect to IRC and dispatch the messages to the handlers. """
     def __init__(self, pipe):
@@ -45,26 +60,7 @@ class Client(object):
         self.socket.connect((HOST, PORT))
         self.send('PASS {0}\r\n'.format(self.config.oauth))
         self.send('NICK {0}\r\n'.format(self.config.username))
-        self.send('JOIN #{0}\r\n'.format(self.config.channel))
-
-        self.add_handler(self.active_twitch_capabilities)
-
-    """Active twitch capabilities
-    #fixme : remove this after test are OK
-    """
-    def active_twitch_capabilities(self, response, client):
-
-        #logger.debug('from : {0} command : {1} parameters : {2}\r\n'.format(response.response_from, response.command, response.parameters))
-
-        if response.command != '366':
-            return
-
-        logger.debug('Active twitch capabilities')
-        client.send('CAP REQ :twitch.tv/membership')
-        client.send('CAP REQ :twitch.tv/commands')
-        # client.send('PRIVMSG #ikev17 :ceci est un test')
-        self.remove_handler(self.active_twitch_capabilities)
-
+        self.add_handler(handle_connexion)
 
     def send(self, message):
         logger.debug('> {0}'.format(message))
