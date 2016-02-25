@@ -34,3 +34,16 @@ $(function() {
         element.addClass('active');
     }
 });
+
+// Handle CSRF
+$(function() {
+    var csrf_token = $('body').attr('data-csrf');
+
+    $('form').prepend('<input type="hidden" name="_csrf_token" value="'+ csrf_token +'" />');
+
+    $.ajaxSetup({
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('X-CsrfToken', csrf_token);
+        }
+    });
+});

@@ -1,3 +1,6 @@
+import hashlib
+import os
+
 from peewee import Model, CharField, BooleanField, ForeignKeyField, IntegerField
 
 from core_modules import install_core_modules
@@ -12,6 +15,7 @@ class Configuration(Model):
     username = CharField(default="")
     oauth = CharField(default="")
     channel = CharField(default="")
+    secret = CharField()
 
     def get_activated_modules(self):
         return self.modules.select().where(ModuleConfiguration.activated == True)
@@ -42,6 +46,6 @@ class DashboardConfiguration(Model):
 if 'configuration' not in db.get_tables():
     # The database has not been created yet, let's do it.
     db.create_tables([Configuration, ModuleConfiguration, DashboardConfiguration])
-    Configuration.create()
+    Configuration.create(secret=hashlib.sha256(os.urandom(16)).hexdigest())
     install_core_modules()
 db.close()

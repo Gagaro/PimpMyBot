@@ -3,6 +3,8 @@ import os
 
 from bottle import TEMPLATE_PATH, Bottle, debug
 
+from wsgi.csrf import require_csrf
+
 # Bottle configuration
 debug(True)
 BASE_DIR = os.path.dirname(__file__)
@@ -48,3 +50,4 @@ class App(Bottle):
 
 
 app = App()
+app.install(require_csrf)
