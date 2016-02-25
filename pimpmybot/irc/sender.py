@@ -20,7 +20,6 @@ class Sender(object):
         self.nb_send_since_reset = 0
 
     def configure(self, irc_client):
-
         if irc_client is None:
             logger.debug('ERROR - irc_client is null, sender configuration abort')
             return
@@ -33,12 +32,8 @@ class Sender(object):
         self.channel = irc_client.config.channel
 
     def send_list(self):
-
-        logger.debug('buffer = {0}'.format(self.buffer))
-
         if len(self.buffer) <= 0:
             return
-
         #each X seconds, reset counter
         timeElapsed = time.time() - self.last_reset
         if timeElapsed >= PER_X_SECONDS:
@@ -56,8 +51,6 @@ class Sender(object):
                 self.nb_send_since_reset = self.nb_send_since_reset + 1
                 self.send(mess)
                 self.buffer.remove(mess)
-            else:
-                break
 
     def send(self,message):
         """

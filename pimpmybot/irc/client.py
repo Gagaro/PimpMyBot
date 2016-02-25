@@ -23,10 +23,10 @@ def handle_connexion(response, client):
     if response.command != '001':
         return
 
-    self.send('join',None)
-    self.send('raw','CAP REQ :twitch.tv/membership')
-    self.send('raw','CAP REQ :twitch.tv/commands')
-    self.send('raw','CAP REQ :twitch.tv/tags')
+    client.send('join',None)
+    client.send('raw','CAP REQ :twitch.tv/membership')
+    client.send('raw','CAP REQ :twitch.tv/commands')
+    client.send('raw','CAP REQ :twitch.tv/tags')
     client.remove_handler(handle_connexion)
 
 
@@ -90,11 +90,11 @@ class Client(object):
                 import time
                 time.sleep(5)
                 continue
-                for line in response.split('\n'):
-                    line = line.strip()
-                    if line:
-                        logger.debug('< {0}'.format(line))
-                        self.handle(Response(line))
+            for line in response.split('\n'):
+                line = line.strip()
+                if line:
+                     logger.debug('< {0}'.format(line))
+                     self.handle(Response(line))
 
     def manage_sender(self):
        if self.sender is None:
