@@ -9,8 +9,8 @@ from utils.parser import Response
 
 logger = get_logger('irc', DEBUG)
 
-#HOST = 'irc.twitch.tv'
-HOST = 'localhost'
+HOST = 'irc.twitch.tv'
+#HOST = 'localhost'
 PORT = 6667
 
 
@@ -45,7 +45,26 @@ class Client(object):
         self.socket.connect((HOST, PORT))
         self.send('PASS {0}\r\n'.format(self.config.oauth))
         self.send('NICK {0}\r\n'.format(self.config.username))
-        self.send('JOIN {0}\r\n'.format('#' + self.config.channel))
+        self.send('JOIN #{0}\r\n'.format(self.config.channel))
+
+        self.add_handler(self.active_twitch_capabilities)
+
+    """Active twitch capabilities
+    #fixme : remove this after test are OK
+    """
+    def active_twitch_capabilities(self, response, client):
+
+        #logger.debug('from : {0} command : {1} parameters : {2}\r\n'.format(response.response_from, response.command, response.parameters))
+
+        if response.command != '366':
+            return
+
+        logger.debug('Active twitch capabilities')
+        client.send('CAP REQ :twitch.tv/membership')
+        client.send('CAP REQ :twitch.tv/commands')
+       # client.send('PRIVMSG #ikev17 :ceci est un test')
+        self.remove_handler(self.active_twitch_capabilities)
+
 
     def send(self, message):
         logger.debug('> {0}'.format(message))
