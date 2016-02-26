@@ -1,7 +1,7 @@
 import re
 
 # Regular expression for fast parsing
-RESPONSE_RE = re.compile('^(?:(?P<tags>@[^ ]+) )?(?::(?P<from>[^ ]+) )?(?P<command>\w+) (?P<parameters>.+)$')
+RESPONSE_RE = re.compile('^(?:@(?P<tags>[^ ]+) )?(?::(?P<from>[^ ]+) )?(?P<command>\w+)(?: (?P<parameters>.+))?$')
 PRIVMSG_RE = re.compile('^(?P<target>#?\w+) :(?P<message>.*)$')
 
 
@@ -14,11 +14,21 @@ class Response(object):
 
     def __init__(self, response):
         response = RESPONSE_RE.match(response).groupdict()
-        self.tags = response['tags']
+        self.tags = self.parse_tags(response['tags'])
         self.response_from = response['from']
         self.command = response['command']
         self.parameters = response['parameters']
         self._data = None
+
+    def parse_tags(self, tags):
+        tags_dict = {}
+        if tags is None:
+            return tags_dict
+        tags = tags.split(';')
+        for tag in tags:
+            key, value = tag.split('=', 1)
+            tags_dict[key] = value
+        return tags_dict
 
     @property
     def data(self):

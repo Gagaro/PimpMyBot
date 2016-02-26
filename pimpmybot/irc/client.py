@@ -3,10 +3,10 @@ import socket
 
 import six
 
+from irc.parser import Response
 from irc.sender import Sender
 from utils.config import Configuration
 from utils.logging import get_logger
-from utils.parser import Response
 
 
 logger = get_logger('irc', DEBUG)
