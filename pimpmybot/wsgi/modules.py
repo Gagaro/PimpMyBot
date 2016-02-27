@@ -1,5 +1,5 @@
 from operator import attrgetter
-from utils.config import Configuration, DashboardConfiguration
+from utils.config import Configuration, WidgetConfiguration
 
 
 def get_menu():
@@ -10,23 +10,23 @@ def get_menu():
 
 
 def get_dashboard():
-    dashboards = {
+    dashboard = {
         'deactivated': [],
         'left': [],
         'middle': [],
         'right': [],
     }
     for module in Configuration.get().get_activated_modules():
-        for identifier, dashboard in module.get_module().dashboards.items():
-            config = DashboardConfiguration.get_or_create(identifier=identifier)[0]
-            dashboard.update({
+        for identifier, widget in module.get_module().widgets.items():
+            config = WidgetConfiguration.get_or_create(identifier=identifier)[0]
+            widget.update({
                 'config': config,
                 'identifier': identifier,
             })
             if config.column in ['left', 'middle', 'right']:
-                dashboards[config.column].append(dashboard)
+                dashboard[config.column].append(widget)
             else:
-                dashboards['deactivated'].append(dashboard)
-    for column, dashboards_list in dashboards.items():
-        dashboards[column] = sorted(dashboards_list, key=lambda d: d['config'].order)
-    return dashboards
+                dashboard['deactivated'].append(widget)
+    for column, widgets_list in dashboard.items():
+        dashboard[column] = sorted(widgets_list, key=lambda d: d['config'].order)
+    return dashboard

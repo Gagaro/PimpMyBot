@@ -2,7 +2,7 @@ import json
 
 from bottle import jinja2_view, HTTPResponse, request
 
-from utils.config import DashboardConfiguration
+from utils.config import WidgetConfiguration
 from wsgi import app
 from wsgi.modules import get_dashboard
 
@@ -13,7 +13,7 @@ route = app.route
 @jinja2_view('dashboard')
 def dashboard_view():
     return {
-        'dashboards': get_dashboard()
+        'dashboard': get_dashboard()
     }
 
 
@@ -23,7 +23,7 @@ def dashboard_ajax_post_view():
     for column in ['deactivated', 'left', 'middle', 'right']:
         order = 0
         for identifier in data.get(column, []):
-            config = DashboardConfiguration.get(DashboardConfiguration.identifier == identifier)
+            config = WidgetConfiguration.get(WidgetConfiguration.identifier == identifier)
             config.column = column
             config.order = order
             order += 1

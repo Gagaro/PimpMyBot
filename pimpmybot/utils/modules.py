@@ -55,14 +55,14 @@ class BaseModule(object):
         return []
 
     @property
-    def dashboards(self):
+    def widgets(self):
         """
-        Dashboard  panels of this moduel.
+        Widget of this module for the dashboard panel.
         Should be a dict such as the following:
 
         {
-            'id_of_dashboard': {
-                "title": "My module dashboard",
+            'id_of_widget': {
+                "title": "My module widget",
                 "html": "<p>I am a paragraph</p>"
             },
         }
@@ -97,7 +97,7 @@ class BaseModule(object):
         logger.debug('installing module {0}'.format(self.identifier))
         assert self.config.activated
         self.config.installed = True
-        self.config.upgrades = len(self.upgrades())
+        self.config.upgrades = len(self.upgrades)
         self.config.save()
 
     def uninstall(self):

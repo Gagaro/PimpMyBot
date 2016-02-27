@@ -35,7 +35,7 @@ class ModuleConfiguration(Model):
         return modules[self.identifier]
 
 
-class DashboardConfiguration(Model):
+class WidgetConfiguration(Model):
     class Meta:
         database = db
 
@@ -46,7 +46,7 @@ class DashboardConfiguration(Model):
 
 if 'configuration' not in db.get_tables():
     # The database has not been created yet, let's do it.
-    db.create_tables([Configuration, ModuleConfiguration, DashboardConfiguration])
+    db.create_tables([Configuration, ModuleConfiguration, WidgetConfiguration])
     Configuration.create(secret=hashlib.sha256(os.urandom(16)).hexdigest())
     install_core_modules()
 db.close()

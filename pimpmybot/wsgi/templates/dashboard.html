@@ -16,11 +16,11 @@
 <script src="/static/js/dashboard.js"></script>
 {% endblock %}
 
-{% macro render_dashboard(dashboard) %}
-<div class="panel panel-default dashboard" data-identifier="{{ dashboard['identifier'] }}">
-    <div class="panel-heading">{{ dashboard['title'] }}</div>
+{% macro render_widget(widget) %}
+<div class="panel panel-default widget" data-identifier="{{ widget['identifier'] }}">
+    <div class="panel-heading">{{ widget['title'] }}</div>
     <div class="panel-body">
-        {{ dashboard['html'] | safe }}
+        {{ widget['html'] | safe }}
     </div>
 </div>
 {% endmacro %}
@@ -38,19 +38,19 @@
         </div>
         <div class="col-md-11 collapse" id="collapse-dashboard">
             <div class="container" id="deactivated">
-                {% for dashboard in dashboards['deactivated'] %}{{ render_dashboard(dashboard) }}{% endfor %}
+                {% for widget in dashboard['deactivated'] %}{{ render_widget(widget) }}{% endfor %}
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-4 container" id="left">
-            {% for dashboard in dashboards['left'] %}{{ render_dashboard(dashboard) }}{% endfor %}
+            {% for widget in dashboard['left'] %}{{ render_widget(widget) }}{% endfor %}
         </div>
         <div class="col-md-4 container" id="middle">
-            {% for dashboard in dashboards['middle'] %}{{ render_dashboard(dashboard) }}{% endfor %}
+            {% for widget in dashboard['middle'] %}{{ render_widget(widget) }}{% endfor %}
         </div>
         <div class="col-md-4 container" id="right">
-            {% for dashboard in dashboards['right'] %}{{ render_dashboard(dashboard) }}{% endfor %}
+            {% for widget in dashboard['right'] %}{{ render_widget(widget) }}{% endfor %}
         </div>
     </div>
 </div>

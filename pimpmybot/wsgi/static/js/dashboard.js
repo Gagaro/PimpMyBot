@@ -17,13 +17,13 @@ $(function() {
         $('button#validate-dashboard').hide();
         $('div#dashboard div.container').removeClass('dragula-draggable');
 
-        var dashboards = {
-            'deactivated': $('div#deactivated .dashboard').map(function(){return $(this).attr("data-identifier");}).get(),
-            'left': $('div#left .dashboard').map(function(){return $(this).attr("data-identifier");}).get(),
-            'middle': $('div#middle .dashboard').map(function(){return $(this).attr("data-identifier");}).get(),
-            'right': $('div#right .dashboard').map(function(){return $(this).attr("data-identifier");}).get(),
+        var dashboard = {
+            'deactivated': $('div#deactivated .widget').map(function(){return $(this).attr("data-identifier");}).get(),
+            'left': $('div#left .widget').map(function(){return $(this).attr("data-identifier");}).get(),
+            'middle': $('div#middle .widget').map(function(){return $(this).attr("data-identifier");}).get(),
+            'right': $('div#right .widget').map(function(){return $(this).attr("data-identifier");}).get(),
         };
 
-        $.post(document.location.href, {data: JSON.stringify(dashboards)});
+        $.post(document.location.href, {data: JSON.stringify(dashboard)});
     });
 });

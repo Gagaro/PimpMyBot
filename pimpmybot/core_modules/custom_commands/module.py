@@ -32,7 +32,7 @@ class CustomCommandModule(BaseModule):
     }]
 
     @property
-    def dashboards(self):
+    def widgets(self):
         return {
             'custom_commands': {
                 'title': 'Custom commands',
