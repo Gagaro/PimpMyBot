@@ -97,6 +97,7 @@ class BaseModule(object):
         logger.debug('installing module {0}'.format(self.identifier))
         assert self.config.activated
         self.config.installed = True
+        self.config.upgrades = len(self.upgrades())
         self.config.save()
 
     def uninstall(self):
@@ -105,6 +106,30 @@ class BaseModule(object):
         assert not self.config.activated
         self.config.installed = False
         self.config.save()
+
+    @property
+    def upgrades(self):
+        """
+        upgrades is a list of methods to call in order to upgrade the module.
+
+        These methods will NOT be called when install is called. It is there
+        to ensure compatibility when the module is already installed.
+        """
+        return []
+
+    def run_upgrades(self):
+        """
+        Run needed upgrades.
+        """
+        upgrades = self.upgrades[self.config.upgrades:]
+        for upgrade in upgrades:
+            upgrade()
+        self.config.upgrades = len(self.upgrades)
+        self.config.save()
+
+    def need_upgrades(self):
+        """ True if upgrade needed. """
+        return len(self.upgrades) != self.config.upgrades
 
 
 def load_modules():

@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if not need_upgrades %}
+    <p>Everything is up to date. <a href="{{ url('dashboard') }}">Return to the dashboard.</a></p>
+    {% endif %}
+{% endblock %}

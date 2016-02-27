@@ -44,3 +44,18 @@ def modules_view_post():
     return {
         'modules': modules,
     }
+
+
+@route('/upgrades', name='upgrades')
+@jinja2_view('upgrades')
+def upgrades_view():
+    return {}
+
+
+@route('/upgrades', name='upgrades', method='POST')
+@jinja2_view('upgrades')
+def upgrades_view_post():
+    for module in get_activated_modules():
+        if module.need_upgrades():
+            module.run_upgrades()
+    return {}

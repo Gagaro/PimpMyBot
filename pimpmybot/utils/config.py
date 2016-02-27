@@ -28,6 +28,7 @@ class ModuleConfiguration(Model):
     identifier = CharField()
     activated = BooleanField(default=False)
     installed = BooleanField(default=False)
+    upgrades = IntegerField(default=0)
     configuration = ForeignKeyField(Configuration, related_name='modules', default=lambda: Configuration.get())
 
     def get_module(self):
