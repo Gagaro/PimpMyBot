@@ -27,13 +27,7 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        'python-daemon'
         'bottle',
         'requests',
     ],
-    entry_points="""\
-      [console_scripts]
-      plone-generate-gruntfile = Products.CMFPlone._scripts.generate_gruntfile:main
-      plone-compile-resources = Products.CMFPlone._scripts.compile_resources:main
-      """
 )
