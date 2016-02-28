@@ -5,6 +5,7 @@ from peewee import Model, CharField, BooleanField, ForeignKeyField, IntegerField
 
 from core_modules import install_core_modules
 from utils import db
+from utils.upgrades import upgrades
 from utils.modules import modules
 
 
@@ -16,6 +17,7 @@ class Configuration(Model):
     oauth = CharField(default="")
     channel = CharField(default="")
     secret = CharField()
+    upgrades = IntegerField()
 
     def get_activated_modules(self):
         return self.modules.select().where(ModuleConfiguration.activated == True)
@@ -47,6 +49,16 @@ class WidgetConfiguration(Model):
 if 'configuration' not in db.get_tables():
     # The database has not been created yet, let's do it.
     db.create_tables([Configuration, ModuleConfiguration, WidgetConfiguration])
-    Configuration.create(secret=hashlib.sha256(os.urandom(16)).hexdigest())
+    Configuration.create(
+        secret=hashlib.sha256(os.urandom(16)).hexdigest(),
+        upgrades=len(upgrades),
+    )
     install_core_modules()
+else:
+    # Upgrade if needed
+    upgrades_done = Configuration.select(Configuration.upgrades).get().upgrades
+    if upgrades_done < len(upgrades):
+        for upgrade in upgrades[upgrades_done:]:
+            upgrade()
+        Configuration.update(upgrades=len(upgrades)).execute()
 db.close()
