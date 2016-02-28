@@ -3,6 +3,7 @@ from setuptools import find_packages
 
 version = '0.0.1.dev0'
 
+
 setup(
     name='Products.CMFPlone',
     version=version,
@@ -29,5 +30,10 @@ setup(
     install_requires=[
         'bottle',
         'requests',
+        'appdirs',
+        'jinja2',
+        'peewee',
+        'six',
+        'Babel',
     ],
 )

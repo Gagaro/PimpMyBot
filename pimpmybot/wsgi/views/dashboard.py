@@ -1,10 +1,11 @@
 import json
 
-from bottle import jinja2_view, HTTPResponse, request
+from bottle import HTTPResponse, request
 
 from utils.config import WidgetConfiguration
 from wsgi import app
 from wsgi.modules import get_dashboard
+from wsgi.views import jinja2_view
 
 route = app.route
 

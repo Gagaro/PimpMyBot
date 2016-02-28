@@ -1,10 +1,11 @@
 import os
 
-from bottle import jinja2_view, request, TEMPLATE_PATH
+from bottle import request, TEMPLATE_PATH
 from peewee import IntegrityError
 
 from wsgi import app
 from wsgi.messages import success, danger
+from wsgi.views import jinja2_view
 from .module import Command
 
 TEMPLATE_PATH.append(os.path.join(os.path.dirname(__file__), 'templates'))

@@ -1,9 +1,10 @@
-from bottle import jinja2_view, request
+from bottle import  request
 
 from utils.config import ModuleConfiguration
 from utils.modules import modules, get_activated_modules, get_deactivated_modules
 from wsgi import app
 from wsgi.messages import success, danger
+from wsgi.views import jinja2_view
 
 route = app.route
 
@@ -22,10 +23,10 @@ def modules_view_post():
     if 'uninstall' in request.forms.keys():
         module = ModuleConfiguration.get(ModuleConfiguration.identifier == request.forms['uninstall'])
         if module.activated:
-            danger('Module is activated.')
+            danger(_('Module is activated.'))
         else:
             module.get_module().uninstall()
-            success('Module uninstalled successfully.')
+            success(_('Module uninstalled successfully.'))
     else:
         activated_modules = set([module.identifier for module in get_activated_modules()])
         deactivated_modules = set([module.identifier for module in get_deactivated_modules()])
@@ -40,7 +41,7 @@ def modules_view_post():
             modules[identifier].deactivate()
 
         if to_activate or to_deactivate:
-            success('Module changed successfully.')
+            success(_('Module changed successfully.'))
     return {
         'modules': modules,
     }

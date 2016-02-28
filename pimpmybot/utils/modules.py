@@ -132,37 +132,46 @@ class BaseModule(object):
         return len(self.upgrades) != self.config.upgrades
 
 
-def load_modules():
-    """ Search through all modules directory and import the detected modules. """
-    global modules
+class ModulesList(dict):
+    """ Load modules only when needed to avoid circular  import. """
 
-    logger.debug("Loading all modules start.")
-    modules = {}
-    saved_paths = sys.path
-    for path in MODULES_PATHS:
-        # We overwrite sys.path temporarily
-        sys.path = [path]
-        for file in os.listdir(path):
-            # Only try to import python file
-            if file[-3:] != '.py' and not os.path.isdir('{0}/{1}'.format(path, file)):
-                continue
-            if file[-3:] == '.py':
-                file = file[:-3]
-            try:
-                module = __import__(file).module
-            # except ImportError:
-            #     logger.warning('Error importing {0}'.format(file))
-            except AttributeError:
-                pass
-            else:
-                if isinstance(module, BaseModule):
-                    logger.debug('Adding {0}'.format(module.identifier))
-                    modules[module.identifier] = module
-    sys.path = saved_paths
-    logger.debug("Loading all modules end.")
-    return modules
+    def __getattribute__(self, name):
+        if not self and name is not 'load_modules':
+            self.load_modules()
+        return dict.__getattribute__(self, name)
+    
+    def __getitem__(self, item):
+        if not self:
+            self.load_modules()
+        return super(ModulesList, self).__getitem__(item)
+    
+    def load_modules(self):
+        """ Search through all modules directory and import the detected modules. """
+        logger.debug("Loading all modules start.")
+        saved_paths = sys.path
+        for path in MODULES_PATHS:
+            # We overwrite sys.path temporarily
+            sys.path = [path]
+            for file in os.listdir(path):
+                # Only try to import python file
+                if file[-3:] != '.py' and not os.path.isdir('{0}/{1}'.format(path, file)):
+                    continue
+                if file[-3:] == '.py':
+                    file = file[:-3]
+                try:
+                    module = __import__(file).module
+                # except ImportError:
+                #     logger.warning('Error importing {0}'.format(file))
+                except AttributeError:
+                    pass
+                else:
+                    if isinstance(module, BaseModule):
+                        logger.debug('Adding {0}'.format(module.identifier))
+                        self[module.identifier] = module
+        sys.path = saved_paths
+        logger.debug("Loading all modules end.")
 
-modules = load_modules()
+modules = ModulesList()
 
 
 def get_activated_modules():

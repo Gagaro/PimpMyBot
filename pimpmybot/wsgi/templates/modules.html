@@ -15,14 +15,14 @@
 {% block content %}
 <form action="{{ url('modules') }}" method="post" role="form">
     <div class="panel panel-default">
-        <div class="panel-heading">Modules</div>
+        <div class="panel-heading">{{ _('Modules') }}</div>
         <div class="panel-body">
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Activated</th>
-                        <th>Module</th>
-                        <th>Dependencies</th>
+                        <th>{{ _('Activated') }}</th>
+                        <th>{{ _('Module') }}</th>
+                        <th>{{ _('Dependencies') }}</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -36,7 +36,7 @@
                         <td>{% for identifier in module.dependencies %}{{ show_dependency(identifier) }}{{ ', ' if not loop.last }}{% endfor %}</td>
                         <td>
                             {% if not module.config.activated and module.config.installed %}
-                            <button type="submit" class="btn btn-danger" title="Uninstall"
+                            <button type="submit" class="btn btn-danger" title="{{ _('Uninstall') }}"
                                     name="uninstall" value="{{ module.identifier }}">
                                 <i class="fa fa-fw fa-times"></i>
                             </button>
@@ -47,7 +47,7 @@
                 </tbody>
             </table>
 
-            <input class="btn btn-primary" type="submit" value="Save" />
+            <input class="btn btn-primary" type="submit" value="{{ _('Save') }}" />
         </div>
     </div>
 </form>

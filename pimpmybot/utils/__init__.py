@@ -1,3 +1,4 @@
+import gettext
 import os
 
 from appdirs import user_data_dir

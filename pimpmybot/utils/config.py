@@ -4,8 +4,8 @@ import os
 from peewee import Model, CharField, BooleanField, ForeignKeyField, IntegerField
 
 from utils import db
-from utils.upgrades import upgrades
 from utils.modules import modules
+from utils.upgrades import upgrades
 
 
 class Configuration(Model):

@@ -1,10 +1,11 @@
 import os
 
-from bottle import jinja2_view, request, static_file, redirect
+from bottle import request, static_file, redirect
 
 from utils.config import Configuration
 from wsgi import BASE_DIR, app
 from wsgi.messages import success
+from wsgi.views import jinja2_view
 
 route = app.route
 

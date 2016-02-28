@@ -5,3 +5,4 @@ jinja2
 -e git+https://github.com/Gagaro/peewee.git#egg=peewee
 requests
 six
+Babel
