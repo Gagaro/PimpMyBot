@@ -1,3 +1,5 @@
+import sys
+
 import os
 import unittest
 import mock
@@ -15,4 +17,11 @@ if __name__ == '__main__':
         loader = unittest.TestLoader()
         tests = loader.discover(os.path.dirname(__file__))
         testRunner = unittest.runner.TextTestRunner()
-        testRunner.run(tests)
+        failures, errors = testRunner.run(tests)
+
+    if errors:
+        sys.exit(2)
+    elif failures:
+        sys.exit(1)
+
+    sys.exit(0)
