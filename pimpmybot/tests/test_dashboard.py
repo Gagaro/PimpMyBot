@@ -1,6 +1,7 @@
 import mock
 import unittest
 
+from tests.base import BaseTestCase
 from utils.modules import BaseModule
 
 
@@ -40,8 +41,9 @@ modules = {
 
 @mock.patch('utils.modules.modules', modules)
 @mock.patch('utils.config.modules', modules)
-class TestDashboard(unittest.TestCase):
-    def setUp(cls):
+class TestDashboard(BaseTestCase):
+    def setUp(self):
+        super(TestDashboard, self).setUp()
         from utils.config import ModuleConfiguration
 
         ModuleConfiguration.update(activated=False).execute()
@@ -60,8 +62,9 @@ class TestDashboard(unittest.TestCase):
 
 @mock.patch('utils.modules.modules', modules)
 @mock.patch('utils.config.modules', modules)
-class TestViews(unittest.TestCase):
+class TestViews(BaseTestCase):
     def setUp(self):
+        super(TestViews, self).setUp()
         from utils.config import ModuleConfiguration
 
         ModuleConfiguration.update(activated=False).execute()

@@ -2,6 +2,6 @@ appdirs
 bottle
 jinja2
 #peewee
--e git+https://github.com/coleifer/peewee.git#egg=peewee
+-e git+https://github.com/Gagaro/peewee.git#egg=peewee
 requests
 six
