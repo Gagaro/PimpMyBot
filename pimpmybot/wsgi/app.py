@@ -22,6 +22,8 @@ class App(Bottle):
         self._messages = []
 
     def run(self):
+        import wsgi.views
+
         self.restart_irc_bot()
         super(App, self).run()
 

@@ -3,7 +3,6 @@ import os
 
 from peewee import Model, CharField, BooleanField, ForeignKeyField, IntegerField
 
-from core_modules import install_core_modules
 from utils import db
 from utils.upgrades import upgrades
 from utils.modules import modules
@@ -48,6 +47,8 @@ class WidgetConfiguration(Model):
 
 if 'configuration' not in db.get_tables():
     # The database has not been created yet, let's do it.
+    from core_modules import install_core_modules
+
     db.create_tables([Configuration, ModuleConfiguration, WidgetConfiguration])
     Configuration.create(
         secret=hashlib.sha256(os.urandom(16)).hexdigest(),
@@ -61,4 +62,3 @@ else:
         for upgrade in upgrades[upgrades_done:]:
             upgrade()
         Configuration.update(upgrades=len(upgrades)).execute()
-db.close()

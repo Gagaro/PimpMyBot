@@ -1,13 +1,13 @@
 import os
 
 from bottle import jinja2_view, request, TEMPLATE_PATH
-
-from core_modules.custom_commands.module import Command
 from peewee import IntegrityError
+
 from wsgi import app
 from wsgi.messages import success, danger
+from .module import Command
 
-TEMPLATE_PATH.append(os.path.join(os.path.dirname(__file__) , 'templates'))
+TEMPLATE_PATH.append(os.path.join(os.path.dirname(__file__), 'templates'))
 route = app.route
 
 
