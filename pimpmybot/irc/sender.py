@@ -1,9 +1,9 @@
+from logging import DEBUG
 import time
 
 import six
 
 from utils.logging import get_logger
-from logging import DEBUG
 
 logger = get_logger('irc_sender', DEBUG)
 

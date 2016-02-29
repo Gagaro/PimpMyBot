@@ -1,8 +1,6 @@
-from operator import attrgetter
-from utils.config import Configuration, WidgetConfiguration
-
-
 def get_menu():
+    from utils.config import Configuration
+
     menu = []
     for module in Configuration.get().get_activated_modules():
         menu.extend(module.get_module().menus)
@@ -10,6 +8,8 @@ def get_menu():
 
 
 def get_dashboard():
+    from utils.config import Configuration, WidgetConfiguration
+
     dashboard = {
         'deactivated': [],
         'left': [],

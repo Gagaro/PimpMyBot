@@ -1,10 +1,11 @@
-from bottle import  request
+from bottle import request
 
 from utils.config import ModuleConfiguration
 from utils.modules import modules, get_activated_modules, get_deactivated_modules
+from utils.translations import _
 from wsgi import app
 from wsgi.messages import success, danger
-from wsgi.views import jinja2_view
+from wsgi.bottle import jinja2_view
 
 route = app.route
 

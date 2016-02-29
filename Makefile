@@ -2,4 +2,7 @@ test:
     python pimpmybot/testing.py
 
 extract:
-    pybabel.exe extract -F babel.ini -o pimpmybot/locales/pimpmybot.pot pimpmybot
+    pybabel extract -F babel.ini -o pimpmybot/locales/pimpmybot.pot pimpmybot
+
+compile:
+    pybabel compile -D pimpmybot -d pimpmybot/locales/

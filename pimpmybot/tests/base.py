@@ -16,6 +16,10 @@ class BaseTestCase(unittest.TestCase):
 
 
 class BaseFunctionalTestCase(BaseTestCase):
+    @classmethod
+    def setUpClass(cls):
+        import wsgi.views
+
     def setUp(self):
         super(BaseFunctionalTestCase, self).setUp()
         self.app = TestApp(app)
