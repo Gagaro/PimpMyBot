@@ -8,10 +8,11 @@ from wsgi import app
 
 class BaseTestCase(unittest.TestCase):
     def setUp(self):
-        db.begin()
+        self._transaction = db.transaction()
+        self._transaction.__enter__()
 
     def tearDown(self):
-        db.rollback()
+        self._transaction.__exit__(True, None, None)
 
 
 class BaseFunctionalTestCase(BaseTestCase):

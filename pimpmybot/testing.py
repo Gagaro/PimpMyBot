@@ -17,11 +17,11 @@ if __name__ == '__main__':
         loader = unittest.TestLoader()
         tests = loader.discover(os.path.dirname(__file__))
         testRunner = unittest.runner.TextTestRunner()
-        failures, errors = testRunner.run(tests)
+        result = testRunner.run(tests)
 
-    if errors:
+    if result.errors:
         sys.exit(2)
-    elif failures:
+    elif result.failures:
         sys.exit(1)
 
     sys.exit(0)

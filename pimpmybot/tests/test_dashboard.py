@@ -2,6 +2,7 @@ import mock
 import unittest
 
 from tests.base import BaseTestCase
+from utils.config import ModuleConfiguration
 from utils.modules import BaseModule
 
 
@@ -44,8 +45,6 @@ modules = {
 class TestDashboard(BaseTestCase):
     def setUp(self):
         super(TestDashboard, self).setUp()
-        from utils.config import ModuleConfiguration
-
         ModuleConfiguration.update(activated=False).execute()
         ModuleConfiguration.create(identifier='test', activated=False, installed=True)
         ModuleConfiguration.create(identifier='test2', activated=True, installed=True)
@@ -65,8 +64,6 @@ class TestDashboard(BaseTestCase):
 class TestViews(BaseTestCase):
     def setUp(self):
         super(TestViews, self).setUp()
-        from utils.config import ModuleConfiguration
-
         ModuleConfiguration.update(activated=False).execute()
         ModuleConfiguration.create(identifier='test', activated=True, installed=True)
         ModuleConfiguration.create(identifier='test2', activated=False, installed=True)
