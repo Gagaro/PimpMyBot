@@ -1,3 +1,5 @@
+from __future__ import absolute_import, unicode_literals
+
 import re
 
 # Regular expression for fast parsing

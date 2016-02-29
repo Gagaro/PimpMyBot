@@ -1,3 +1,5 @@
+from __future__ import absolute_import, unicode_literals
+
 from peewee import Model, CharField, BooleanField, ForeignKeyField, IntegerField
 
 from utils import db

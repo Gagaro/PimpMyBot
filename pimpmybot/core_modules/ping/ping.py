@@ -1,4 +1,6 @@
 """ Import the Base Module, A module is part of the bot who manage some stuff """
+from __future__ import absolute_import, unicode_literals
+
 from utils.modules import BaseModule
 
 

@@ -1,3 +1,5 @@
+from __future__ import absolute_import, unicode_literals
+
 import logging
 import os
 import sys
@@ -136,7 +138,7 @@ class ModulesList(dict):
     """ Load modules only when needed to avoid circular  import. """
 
     def __getattribute__(self, name):
-        if not self and name is not 'load_modules':
+        if not self and name != 'load_modules':
             self.load_modules()
         return dict.__getattribute__(self, name)
     
@@ -163,6 +165,8 @@ class ModulesList(dict):
                 # except ImportError:
                 #     logger.warning('Error importing {0}'.format(file))
                 except AttributeError:
+                    pass
+                except ImportError:
                     pass
                 else:
                     if isinstance(module, BaseModule):

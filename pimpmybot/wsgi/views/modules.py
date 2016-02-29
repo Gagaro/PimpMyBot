@@ -1,3 +1,5 @@
+from __future__ import absolute_import, unicode_literals
+
 from bottle import request
 
 from utils.config import ModuleConfiguration

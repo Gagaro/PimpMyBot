@@ -1,3 +1,5 @@
+from __future__ import absolute_import, unicode_literals
+
 import hashlib
 from multiprocessing import Pipe, Process
 import os

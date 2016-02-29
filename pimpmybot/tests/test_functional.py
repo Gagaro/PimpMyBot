@@ -1,3 +1,5 @@
+from __future__ import absolute_import, unicode_literals
+
 from tests.base import BaseFunctionalTestCase
 from wsgi import app
 
