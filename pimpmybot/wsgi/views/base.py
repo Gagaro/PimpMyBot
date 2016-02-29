@@ -4,9 +4,7 @@ import os
 
 from bottle import request, static_file, redirect
 
-from utils.config import Configuration
 from wsgi import BASE_DIR, app
-from wsgi.messages import success
 from wsgi.bottle import jinja2_view
 
 route = app.route
@@ -29,26 +27,6 @@ def status_view_post():
     if 'restart' in request.forms.keys():
         app.restart_irc_bot()
     return {}
-
-
-@route('/configuration', name='configuration')
-@jinja2_view('configuration')
-def configuration_view():
-    return {'config': Configuration.get()}
-
-
-@route('/configuration', name='configuration', method="POST")
-@jinja2_view('configuration')
-def configuration_view_post():
-    configuration = Configuration.get()
-    configuration.username = request.forms['username']
-    configuration.oauth = request.forms['oauth']
-    configuration.channel = request.forms['channel']
-    configuration.save()
-    success('Configuration saved')
-    return {
-        'config': configuration
-    }
 
 
 @route('/static/<filepath:path>')

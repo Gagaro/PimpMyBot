@@ -31,8 +31,15 @@ class PmbJinja2Template(Jinja2Template):
     }
 
     def prepare(self, *args, **kwargs):
-        from utils.translations import translation
+        from babel.support import Translations
+        from utils.translations import TRANSLATIONS_DIR
+        from utils.config import Configuration
 
+        translation = Translations.load(
+            TRANSLATIONS_DIR,
+            locales=Configuration.get().lang,
+            domain='pimpmybot'
+        )
         super(PmbJinja2Template, self).prepare(*args, **kwargs)
         self.env.install_gettext_translations(translation)
 

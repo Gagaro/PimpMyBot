@@ -15,6 +15,7 @@ class Configuration(Model):
     channel = CharField(default="")
     secret = CharField()
     upgrades = IntegerField()
+    lang = CharField(default='en_US')
 
     def get_activated_modules(self):
         return self.modules.select().where(ModuleConfiguration.activated == True)

@@ -13,6 +13,7 @@ class TestWsgi(BaseFunctionalTestCase):
             'username': 'USERNAME',
             'oauth': 'OAUTH',
             'channel': 'CHANNEL',
+            'lang': 'en_US',
         })
 
         config = Configuration.get()

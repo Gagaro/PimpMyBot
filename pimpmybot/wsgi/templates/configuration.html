@@ -6,22 +6,31 @@
 {% block content %}
 <form action="{{ url('configuration') }}" method="post" role="form">
     <div class="panel panel-default">
-        <div class="panel-heading">Twitch Bot</div>
+        <div class="panel-heading">{% trans %}Twitch Bot{% endtrans %}</div>
         <div class="panel-body">
             <div class="form-group">
-                <label>Twitch Bot Username</label>
+                <label>{% trans %}Twitch Bot Username{% endtrans %}</label>
                 <input class="form-control" name="username" value="{{ config.username }}" />
             </div>
 
             <div class="form-group">
-                <label>Twitch Bot Oauth Token</label>
+                <label>{% trans %}Twitch Bot Oauth Token{% endtrans %}</label>
                 <input class="form-control" name="oauth" value="{{ config.oauth }}" />
                 <p class="help-block">You can get yours <a href="http://twitchapps.com/tmi/">here</a>.</p>
             </div>
 
             <div class="form-group">
-                <label>Enter the channel to join :</label>
+                <label>{% trans %}Enter the channel to join{% endtrans %}</label>
                 <input class="form-control" name="channel" value="{{ config.channel }}" />
+            </div>
+
+            <div class="form-group">
+                <label>{% trans %}Language{% endtrans %}</label>
+                <select class="form-control" name="lang">
+                    {% for language in languages -%}
+                    <option value="{{ language | string }}" {% if config.lang == language | string %}selected{% endif %}>{{ language.display_name }}</option>
+                    {%- endfor %}
+                </select>
             </div>
 
             <input class="btn btn-primary" type="submit" value="Save" />
