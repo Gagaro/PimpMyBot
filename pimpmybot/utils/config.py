@@ -1,11 +1,7 @@
-import hashlib
-import os
-
 from peewee import Model, CharField, BooleanField, ForeignKeyField, IntegerField
 
 from utils import db
 from utils.modules import modules
-from utils.upgrades import upgrades
 
 
 class Configuration(Model):
@@ -44,21 +40,3 @@ class WidgetConfiguration(Model):
     order = IntegerField(default=0)
     column = CharField(default=None, null=True)
 
-
-if 'configuration' not in db.get_tables():
-    # The database has not been created yet, let's do it.
-    from core_modules import install_core_modules
-
-    db.create_tables([Configuration, ModuleConfiguration, WidgetConfiguration])
-    Configuration.create(
-        secret=hashlib.sha256(os.urandom(16)).hexdigest(),
-        upgrades=len(upgrades),
-    )
-    install_core_modules()
-else:
-    # Upgrade if needed
-    upgrades_done = Configuration.select(Configuration.upgrades).get().upgrades
-    if upgrades_done < len(upgrades):
-        for upgrade in upgrades[upgrades_done:]:
-            upgrade()
-        Configuration.update(upgrades=len(upgrades)).execute()

@@ -1,8 +1,12 @@
+import hashlib
 from multiprocessing import Pipe, Process
 import os
 
 from bottle import TEMPLATE_PATH, Bottle, debug
 
+from utils import db
+from utils.config import Configuration, ModuleConfiguration, WidgetConfiguration
+from utils.upgrades import upgrades
 from wsgi.csrf import require_csrf
 
 # Bottle configuration
@@ -24,6 +28,7 @@ class App(Bottle):
     def run(self):
         import wsgi.views
 
+        self.update_db()
         self.restart_irc_bot()
         super(App, self).run()
 
@@ -49,6 +54,26 @@ class App(Bottle):
         self.irc_pipe, self.pipe = Pipe(duplex=False)
         self.irc_process = Process(target=irc_run, args=(self.irc_pipe,))
         self.irc_process.start()
+
+    def update_db(self):
+        """ Install or upgrade DB if needed. """
+        if 'configuration' not in db.get_tables():
+            # The database has not been created yet, let's do it.
+            from core_modules import install_core_modules
+
+            db.create_tables([Configuration, ModuleConfiguration, WidgetConfiguration])
+            Configuration.create(
+                secret=hashlib.sha256(os.urandom(16)).hexdigest(),
+                upgrades=len(upgrades),
+            )
+            install_core_modules()
+        else:
+            # Upgrade if needed
+            upgrades_done = Configuration.select(Configuration.upgrades).get().upgrades
+            if upgrades_done < len(upgrades):
+                for upgrade in upgrades[upgrades_done:]:
+                    upgrade()
+                Configuration.update(upgrades=len(upgrades)).execute()
 
 
 app = App()
