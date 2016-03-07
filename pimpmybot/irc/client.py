@@ -2,8 +2,11 @@ from __future__ import absolute_import, unicode_literals
 
 from logging import DEBUG
 import socket
+from threading import Thread
 
+import schedule
 import six
+import time
 
 from irc.parser import Response
 from irc.sender import Sender
@@ -74,11 +77,21 @@ class Client(object):
             self.sender.send_buffer(self.socket)
 
     def run(self):
+        schedule_thread = Thread(target=self.handle_schedule)
+        schedule_thread.start()
+        self.handle_server()
+
+    def handle_schedule(self):
+        while True:
+            schedule.run_pending()
+            time.sleep(1)
+
+    def handle_server(self):
         while True:
             self.send_buffer()
             try:
                 response = self.socket.recv(1024).decode()
-            except OSError:
+            except (OSError, AttributeError):
                 # Socket is probably close, let's wait until it's connected
                 # FIXME Find a way to handle this cleanly
                 import time
