@@ -30,6 +30,13 @@ class TestParser(unittest.TestCase):
             'twitch_username!twitch_username@twitch_username.tmi.twitch.tv'
         )
 
+    def test_response_from_username(self):
+        response = Response(FULL_RESPONSE_PRIVMSG)
+        self.assertEqual(
+            response.response_from,
+            'twitch_username'
+        )
+
     def test_command(self):
         response = Response(FULL_RESPONSE_PRIVMSG)
         self.assertEqual(

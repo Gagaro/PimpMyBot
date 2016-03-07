@@ -1,39 +1,8 @@
 {% extends 'base.html' %}
 
-{% block head_title %}Custom commands{% endblock %}
-{% block title %}Custom commands{% endblock %}
+{% block head_title %}Users{% endblock %}
+{% block title %}Users{% endblock %}
 
 {% block content %}
-<form action="{{ url('custom_commands:settings') }}" method="post" role="form">
-    <div class="panel panel-default">
-        <div class="panel-heading">Custom commands</div>
-        <div class="panel-body">
-            {% if not commands %}
-            <p>No command yet, add a new one now:</p>
-            {% else %}
-                {% for command in commands %}
-                <div class="form-group">
-                    <div class="input-group btn-group">
-                        <div class="input-group-addon"><i class="fa fa-fw fa-exclamation"></i></div>
-                        <input type="text" class="form-control" name="command-{{ command.id }}" value="{{ request.forms.get('command-{0}'.format(command.id), command.command) }}">
-                        <div class="input-group-addon"><i class="fa fa-fw fa-comment"></i></div>
-                        <input type="text" class="form-control" name="message-{{ command.id }}" value="{{ request.forms.get('message-{0}'.format(command.id), command.command) }}">
-                        <span class="input-group-btn"><button type="submit" class="btn btn-success" name="update" value="{{ command.id }}"><i class="fa fa-fw fa-pencil"></i></button></span>
-                        <span class="input-group-btn"><button type="submit" class="btn btn-danger" name="delete" value="{{ command.id }}"><i class="fa fa-fw fa-times"></i></button></span>
-                    </div>
-                </div>
-                {% endfor %}
-            {% endif %}
-            <div class="form-group">
-                <div class="input-group">
-                    <div class="input-group-addon"><i class="fa fa-fw fa-exclamation"></i></div>
-                    <input type="text" class="form-control" name="new-command" placeholder="command" value="{{ request.forms.get('new-command', '') }}">
-                    <div class="input-group-addon"><i class="fa fa-fw fa-comment"></i></div>
-                    <input type="text" class="form-control" name="new-message" placeholder="message" value="{{ request.forms.get('new-message', '') }}">
-                    <span class="input-group-btn"><button type="submit" class="btn btn-primary" name="create"><i class="fa fa-fw fa-plus"></i></button></span>
-                </div>
-            </div>
-        </div>
-    </div>
-</form>
+TODO
 {% endblock %}

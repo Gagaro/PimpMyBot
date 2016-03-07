@@ -18,6 +18,7 @@ class Response(object):
         response = RESPONSE_RE.match(response).groupdict()
         self.tags = self.parse_tags(response['tags'])
         self.response_from = response['from']
+        self.response_from_username = self.response_from.split('!', 1)[0]
         self.command = response['command']
         self.parameters = response['parameters']
         self._data = None
