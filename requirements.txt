@@ -4,6 +4,8 @@ jinja2
 #peewee
 -e git+https://github.com/coleifer/peewee.git#egg=peewee
 requests
+dateutils
+pytz
 six
 Babel
 schedule

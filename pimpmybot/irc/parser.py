@@ -17,8 +17,9 @@ class Response(object):
     def __init__(self, response):
         response = RESPONSE_RE.match(response).groupdict()
         self.tags = self.parse_tags(response['tags'])
-        self.response_from = response['from']
-        self.response_from_username = self.response_from.split('!', 1)[0]
+        self.response_from = None
+        if response['from'] is not None:
+            self.response_from = response['from'].split('!', 1)[0]
         self.command = response['command']
         self.parameters = response['parameters']
         self._data = None
@@ -61,7 +62,21 @@ class Response(object):
             data['command'] = None
         return data
 
+    def _parse_names(self):
+        """
+        Return a list of names.
+
+        :example:
+
+        353 twitch_username = #channel :twitch_username user2 user3
+
+        ['twitch_username', 'user2', 'user3']
+        """
+        data = self.parameters.split(':', 1)[1].split(' ')
+        return data
+
     # Command to callback method parsing data
     GET_COMMAND_DATA = {
+        '353': _parse_names,  # NAMES
         'PRIVMSG': _parse_privmsg,
     }

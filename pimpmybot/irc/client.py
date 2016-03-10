@@ -28,10 +28,10 @@ def handle_connexion(response, client):
     if response.command != '001':
         return
 
-    client.send(None, type='join')
     client.send('CAP REQ :twitch.tv/membership', type='raw')
     client.send('CAP REQ :twitch.tv/commands', type='raw')
     client.send('CAP REQ :twitch.tv/tags', type='raw')
+    client.send(None, type='join')
     client.remove_handler(handle_connexion)
 
 

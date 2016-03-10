@@ -153,7 +153,7 @@ class ModulesList(dict):
         saved_paths = sys.path
         for path in MODULES_PATHS:
             # We overwrite sys.path temporarily
-            sys.path = [path]
+            sys.path = [path] + saved_paths
             for file in os.listdir(path):
                 # Only try to import python file
                 if file[-3:] != '.py' and not os.path.isdir('{0}/{1}'.format(path, file)):
@@ -167,7 +167,7 @@ class ModulesList(dict):
                 except AttributeError:
                     pass
                 except ImportError:
-                    pass
+                    logger.debug("Could not import module '{0}'".format(file))
                 else:
                     if isinstance(module, BaseModule):
                         logger.debug('Adding {0}'.format(module.identifier))
