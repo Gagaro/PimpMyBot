@@ -5,16 +5,11 @@ from multiprocessing.dummy import Pool as ThreadPool
 
 from peewee import IntegrityError
 
-from utils import db
 from utils.api import Users
 from .models import User
 
-# FIXME avoid importing module in each method
 
-
-def update_user(username, current=True):
-    from . import module as users_module
-
+def update_user(username, users_module=None):
     user_data = Users.get(username)
     try:
         user = User.get(User.username == username)
@@ -38,9 +33,10 @@ def update_user(username, current=True):
         except IntegrityError:
             # Possible if there is a race condition
             pass
-    if current:
+    if users_module is not None:
         # Update current user list
         users_module.current_users[user.username] = user
+    return user
 
 # Avoid hitting the api or the db too much too fast
 update_user_pool = ThreadPool(8)
@@ -55,27 +51,26 @@ def update_user_messages(user):
 
 
 def handle_users(response, client):
-    from . import module as users_module
+    users_module = client.get_module('users')
 
     user = response.response_from
-    if response.command == '353':  # NAMES
-        update_user_pool.imap_unordered(update_user, response.data)
+    if response.command == '353':
+        # NAMES
+        for user in response.data:
+            update_user_pool.apply_async(update_user, args=(user, users_module))
     elif response.command == 'JOIN':
-        update_user_pool.apply_async(update_user, user)
+        # JOIN
+        update_user_pool.apply_async(update_user, args=(user, users_module))
     elif response.command == 'PART':
-        update_user(user)
-        del users_module.current_users[user]
+        # PART
+        def handle_part(user, users_module):
+            update_user(user, users_module)
+            del users_module.current_users[user]
+        update_user_pool.apply_async(handle_part, args=(user, users_module))
     elif response.command == 'PRIVMSG':
-        if user not in users_module.current_users.keys():
-            update_user(user)
-        update_user_messages(users_module.current_users[user])
-
-
-def update_users_time_watched():
-    """ Called every 60 seconds for now. """
-    from . import module as users_module
-
-    current_users = users_module.current_users.copy()
-    for user in current_users.values():
-        user.time_watched += 60
-        user.save()
+        # PRIVMSG
+        def handle_privmsg(user, users_module):
+            if user not in users_module.current_users.keys():
+                update_user(user, users_module)
+            update_user_messages(users_module.current_users[user])
+        update_user_pool.apply_async(handle_privmsg, args=(user, users_module))

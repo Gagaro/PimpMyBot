@@ -44,6 +44,7 @@ class Client(object):
         self.socket = None
         self.handlers = []
         self.sender = Sender(self.config.channel)
+        self.modules = {}
         self.load_modules()
 
     def connect(self):
@@ -116,10 +117,15 @@ class Client(object):
     def load_module(self, module):
         logger.debug('Loading module "{0}"'.format(module.identifier))
         module = module.get_module()
+        self.modules[module.identifier] = module
         for handler in module.handlers:
             self.add_handler(handler)
 
+    def get_module(self, module):
+        return self.modules[module]
+
     def unload_module(self, module):
+        del self.modules[module.identifier]
         for handler in module.handlers:
             self.remove_handler(handler)
 

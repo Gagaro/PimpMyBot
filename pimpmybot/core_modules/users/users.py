@@ -6,7 +6,9 @@ from utils.modules import BaseModule
 from utils.translations import _
 from utils import db
 
+from .handlers import handle_users
 from .models import User
+from .schedules import update_users_time_watched
 
 
 class UsersModule(BaseModule):
@@ -23,12 +25,10 @@ class UsersModule(BaseModule):
 
     current_users = {}
 
-    def __init__(self):
-        # Avoid circular import
-        from .handlers import handle_users, update_users_time_watched
+    handlers = [handle_users]
 
-        self.handlers = [handle_users]
-        schedule.every().minute.do(update_users_time_watched)
+    def __init__(self):
+        schedule.every().minute.do(update_users_time_watched, self.current_users.copy())
 
     @property
     def widgets(self):
