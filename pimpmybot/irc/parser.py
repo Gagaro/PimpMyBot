@@ -7,6 +7,10 @@ RESPONSE_RE = re.compile('^(?:@(?P<tags>[^ ]+) )?(?::(?P<from>[^ ]+) )?(?P<comma
 PRIVMSG_RE = re.compile('^(?P<target>#?\w+) :(?P<message>.*)$')
 
 
+class InvalidResponse(Exception):
+    pass
+
+
 class Response(object):
     """
     Class responsible for the parsing of the irc response.
@@ -16,6 +20,8 @@ class Response(object):
 
     def __init__(self, response):
         response = RESPONSE_RE.match(response).groupdict()
+        if response is None:
+            raise InvalidResponse
         self.tags = self.parse_tags(response['tags'])
         self.response_from = None
         if response['from'] is not None:

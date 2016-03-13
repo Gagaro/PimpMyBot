@@ -8,7 +8,7 @@ import schedule
 import six
 import time
 
-from irc.parser import Response
+from irc.parser import Response, InvalidResponse
 from irc.sender import Sender
 from utils.config import Configuration
 from utils.logging import get_logger
@@ -91,6 +91,8 @@ class Client(object):
             self.send_buffer()
             try:
                 response = self.socket.recv(1024).decode()
+                while response[-1] != '\n':
+                    response += self.socket.recv(1024).decode()
             except (OSError, AttributeError):
                 # Socket is probably close, let's wait until it's connected
                 # FIXME Find a way to handle this cleanly
@@ -100,8 +102,12 @@ class Client(object):
             for line in response.split('\n'):
                 line = line.strip()
                 if line:
-                     logger.debug('< {0}'.format(line))
-                     self.handle(Response(line))
+                    logger.debug('< {0}'.format(line))
+                    try:
+                        response = Response(line)
+                    except InvalidResponse:
+                        continue
+                    self.handle(response)
 
     def load_modules(self):
         for module in self.config.get_activated_modules():
