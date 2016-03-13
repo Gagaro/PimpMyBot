@@ -34,6 +34,7 @@ class Users(BaseApi):
 
     @classmethod
     def get(cls, username):
+        # FIXME This method needs to be thread safe
         if username not in cls._users.keys():
             data = cls._get('/users/{0}'.format(username)).json()
             cls._users[username] = {
@@ -41,6 +42,6 @@ class Users(BaseApi):
                 'display_name': data['display_name'],
                 'created': dateutil.parser.parse(data['created_at']),
                 'twitch_id': data['_id'],
-                'type': data['type'],
+                'type': data.get('type', 'user'),
             }
         return cls._users[username]

@@ -29,8 +29,11 @@ class App(Bottle):
 
     def run(self):
         import wsgi.views
+        from utils.modules import get_activated_modules
 
         self.update_db()
+        # Load modules
+        get_activated_modules()
         self.restart_irc_bot()
         super(App, self).run()
 

@@ -3,17 +3,36 @@
 {% block head_title %}Users{% endblock %}
 {% block title %}Users{% endblock %}
 
+{% block css %}<link href="/static/bower_components/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet">{% endblock %}
+
+{% block js %}
+    <script src="/static/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script>$('table#users').DataTable()</script>
+{% endblock %}
+
 {% block content %}
-<table>
+<table id="users" class="table table-striped table-hover">
     <thead>
         <tr>
-            <th>Username</th>
+            <th>User</th>
+            <th>Time watched</th>
+            <th>Messages count</th>
+            <th>First watched</th>
+            <th>Last watched</th>
+            <th>First message</th>
+            <th>Last message</th>
         </tr>
     </thead>
     <tbody>
         {% for user in users %}
         <tr>
-            <td>{{ user.username }}</td>
+            <td>{{ user.display_name }}</td>
+            <td>{{ user.time_watched }} seconds</td>
+            <td>{{ user.messages_count }}</td>
+            <td>{{ user.first_watched | datetimeformat }}</td>
+            <td>{{ user.last_watched | datetimeformat }}</td>
+            <td>{{ user.first_message | datetimeformat }}</td>
+            <td>{{ user.last_message | datetimeformat }}</td>
         </tr>
         {% endfor %}
     </tbody>

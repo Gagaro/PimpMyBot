@@ -1,9 +1,12 @@
 from __future__ import absolute_import, unicode_literals
 
+import dateutil
 import functools
 
+from babel.dates import format_datetime
 from bottle import Jinja2Template, request, view
 
+from utils.translations import locale
 from wsgi import app
 from wsgi.modules import get_menu
 
@@ -12,6 +15,14 @@ def need_upgrades():
     """ Avoid circular import """
     from utils.modules import get_activated_modules
     return any([module.need_upgrades() for module in get_activated_modules()])
+
+
+# Filters
+
+def datetimeformat(value, format='short'):
+    if isinstance(value, str):
+        value = dateutil.parser.parse(value)
+    return format_datetime(value, format=format, locale=locale)
 
 
 # Jinja2 configuration
@@ -40,6 +51,9 @@ class PmbJinja2Template(Jinja2Template):
             locales=Configuration.get().lang,
             domain='pimpmybot'
         )
+        kwargs['filters'] = {
+            'datetimeformat': datetimeformat
+        }
         super(PmbJinja2Template, self).prepare(*args, **kwargs)
         self.env.install_gettext_translations(translation)
 

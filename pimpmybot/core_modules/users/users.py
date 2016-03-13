@@ -1,10 +1,11 @@
 from __future__ import absolute_import, unicode_literals
 
+import schedule
+
 from utils.modules import BaseModule
 from utils.translations import _
 from utils import db
 
-from .handlers import handle_users
 from .models import User
 
 
@@ -14,13 +15,20 @@ class UsersModule(BaseModule):
     title = _("Users")
     description = _("Track users watching and interacting with the stream.")
 
-    handlers = [handle_users]
-
     menus = [{
         "title": "Users",
         "icon": "users",
         "view": "users:list"
     }]
+
+    current_users = {}
+
+    def __init__(self):
+        # Avoid circular import
+        from .handlers import handle_users, update_users_time_watched
+
+        self.handlers = [handle_users]
+        schedule.every().minute.do(update_users_time_watched)
 
     @property
     def widgets(self):

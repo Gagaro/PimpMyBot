@@ -8,7 +8,7 @@ from peewee import IntegrityError
 from wsgi import app
 from wsgi.messages import success, danger
 from wsgi.bottle import jinja2_view
-from .module import Command
+from .custom_commands import Command
 
 TEMPLATE_PATH.append(os.path.join(os.path.dirname(__file__), 'templates'))
 route = app.route

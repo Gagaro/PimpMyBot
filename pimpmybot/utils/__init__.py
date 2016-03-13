@@ -11,4 +11,10 @@ DATABASE_PATH = os.path.join(DATA_DIRECTORY, 'database.db')
 
 if not os.path.exists(DATA_DIRECTORY):
     os.makedirs(DATA_DIRECTORY)
-db = SqliteExtDatabase(DATABASE_PATH)
+db = SqliteExtDatabase(
+    DATABASE_PATH,
+    pragmas=(
+        ('journal_mode', 'WAL'),
+        ('busy_timeout', 5000),
+    )
+)
