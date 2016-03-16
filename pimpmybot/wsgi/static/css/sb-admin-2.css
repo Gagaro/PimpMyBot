@@ -191,3 +191,13 @@ body {
     border-style: dashed;
     border-color: #979797;
 }
+
+#dashboard #deactivated {
+    overflow-x: scroll;
+}
+
+#dashboard #deactivated .widget {
+    max-width: 200px;
+    display: inline-block;
+    margin: 0 5px;
+}
