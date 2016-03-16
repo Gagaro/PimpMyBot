@@ -81,8 +81,30 @@ class Response(object):
         data = self.parameters.split(':', 1)[1].split(' ')
         return data
 
+    def _parse_mode(self):
+        """
+        Return the user and the action
+
+        :example:
+
+        MODE #channel +o user
+
+        {'channel': '#channel', 'user': 'user', 'action': 'add'}
+
+        MODE #channel -o user
+
+        {'channel': '#channel', 'user': 'user', 'action': 'remove'}
+        """
+        data = self.parameters.split(' ')
+        return {
+            'channel': data[0],
+            'user': data[2],
+            'action': 'add' if data[1] == '+o' else 'remove'
+        }
+
     # Command to callback method parsing data
     GET_COMMAND_DATA = {
         '353': _parse_names,  # NAMES
         'PRIVMSG': _parse_privmsg,
+        'MODE': _parse_mode,
     }

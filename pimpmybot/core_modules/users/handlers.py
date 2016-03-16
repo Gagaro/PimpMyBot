@@ -60,6 +60,15 @@ def handle_users(response, client):
     elif response.command == 'JOIN':
         # JOIN
         update_user_pool.apply_async(update_user, args=(user, users_module))
+    elif response.command == 'MODE':
+        # MODE
+        user = update_user(response.data['user'], users_module)
+        if user.type == 'user' and response.data['action'] == 'add':
+            user.type = 'mod'
+            user.save()
+        elif user.type == 'mod' and response.data['action'] == 'remove':
+            user.type = 'user'
+            user.save()
     elif response.command == 'PART':
         # PART
         def handle_part(user, users_module):
@@ -70,7 +79,7 @@ def handle_users(response, client):
         # PRIVMSG
         # We also look for the user type
         if '#' + user == response.data['target']:
-            user_type = "owner"
+            user_type = "broadcaster"
         elif response.tags['user-type']:
             user_type = response.tags['user-type']
         else:
@@ -78,8 +87,8 @@ def handle_users(response, client):
 
         def handle_privmsg(user, users_module):
             if user not in users_module.current_users.keys():
-                update_user(user, users_module)
-            update_user_messages(users_module.current_users[user])
+                user = update_user(user, users_module)
+            update_user_messages(user)
             if user.type != user_type:
                 user.type = user_type
                 user.save()
