@@ -25,7 +25,6 @@ def update_user(username, users_module=None):
                 username=user_data['username'],
                 twitch_id=user_data['twitch_id'],
                 display_name=user_data['display_name'],
-                type=user_data['type'],
                 created=user_data['created'],
                 first_watched=datetime.now(),
                 last_watched=datetime.now(),
@@ -69,8 +68,19 @@ def handle_users(response, client):
         update_user_pool.apply_async(handle_part, args=(user, users_module))
     elif response.command == 'PRIVMSG':
         # PRIVMSG
+        # We also look for the user type
+        if '#' + user == response.data['target']:
+            user_type = "owner"
+        elif response.tags['user-type']:
+            user_type = response.tags['user-type']
+        else:
+            user_type = "user"
+
         def handle_privmsg(user, users_module):
             if user not in users_module.current_users.keys():
                 update_user(user, users_module)
             update_user_messages(users_module.current_users[user])
+            if user.type != user_type:
+                user.type = user_type
+                user.save()
         update_user_pool.apply_async(handle_privmsg, args=(user, users_module))

@@ -10,7 +10,7 @@ class User(Model):
     username = CharField(unique=True, null=False)
     twitch_id = IntegerField(unique=True, null=False)
     display_name = CharField(null=False)
-    type = CharField(null=False)
+    type = CharField(null=False, default="user")  # user, mod, global_mod, admin, staff
     created = DateTimeField(null=False)
     first_watched = DateTimeField(null=True)
     last_watched = DateTimeField(null=True)
