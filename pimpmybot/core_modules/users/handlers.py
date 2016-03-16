@@ -89,7 +89,7 @@ def handle_users(response, client):
         # We also look for the user type
         if '#' + user == response.data['target']:
             user_type = "broadcaster"
-        elif response.tags['user-type']:
+        elif response.tags.get('user-type', ''):
             user_type = response.tags['user-type']
         else:
             user_type = "user"

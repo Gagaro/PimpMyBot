@@ -6,7 +6,7 @@ import sys
 
 from utils.logging import get_logger
 
-CORE_MODULES_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'core_modules')
+CORE_MODULES_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'core_modules')
 MODULES_PATHS = [CORE_MODULES_PATH]
 
 logger = get_logger('module', logging.DEBUG)
@@ -70,6 +70,26 @@ class BaseModule(object):
         }
         """
         return {}
+
+    @property
+    def api(self):
+        """
+        List of methods exposed by this module.
+
+        :example:
+
+        def square_root(irc_client, number):
+            return number * number
+
+        {
+            'title': 'Square Root',
+            'method': square_root,
+            'parameters': {
+                'number': IntParameter(),
+            }
+        }
+        """
+        return []
 
     @property
     def config(self):
