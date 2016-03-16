@@ -15,8 +15,16 @@ route = app.route
 @route('/dashboard', name='dashboard')
 @jinja2_view('dashboard')
 def dashboard_view():
+    dashboard = get_dashboard()
+    for column in dashboard.values():
+        for widget in column:
+            if 'html' not in widget.keys():
+                assert 'template' in widget.keys(), 'You must either provide an "html" or "template" parameter.'
+                template = widget['template']
+                context = widget.get('context', {})
+                widget['html'] = jinja2_view(template)(lambda : context)()
     return {
-        'dashboard': get_dashboard()
+        'dashboard': dashboard
     }
 
 

@@ -28,18 +28,16 @@ class UsersModule(BaseModule):
     handlers = [handle_users]
 
     def __init__(self):
-        schedule.every().minute.do(update_users_time_watched, self.current_users.copy())
+        schedule.every().minute.do(update_users_time_watched, self)
 
     @property
     def widgets(self):
+        users_top5 = User.select().order_by(User.time_watched.desc())[:5]
         return {
-            'current_users': {
-                'title': 'Current users',
-                'html': '<strong>TODO</strong>'
-            },
             'users_top5': {
                 'title': 'Top 5 users',
-                'html': '<strong>TODO</strong>'
+                'template': 'users_widget_top5',
+                'context': {'users': users_top5}
             },
         }
 

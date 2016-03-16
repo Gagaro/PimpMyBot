@@ -1,0 +1,5 @@
+<ol>
+{% for user in users -%}
+    <li>{{ user.display_name }} ({{ user.time_watched }} seconds - {{ user.messages_count }} messages)</li>
+{%- endfor %}
+</ol>

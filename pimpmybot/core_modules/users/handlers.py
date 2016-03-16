@@ -1,12 +1,16 @@
 from __future__ import absolute_import, unicode_literals
 
 from datetime import datetime
+from logging import DEBUG
 from multiprocessing.dummy import Pool as ThreadPool
 
 from peewee import IntegrityError
 
 from utils.api import Users
+from utils.logging import get_logger
 from .models import User
+
+logger = get_logger('users', DEBUG)
 
 
 def update_user(username, users_module=None):
@@ -37,9 +41,6 @@ def update_user(username, users_module=None):
         users_module.current_users[user.username] = user
     return user
 
-# Avoid hitting the api or the db too much too fast
-update_user_pool = ThreadPool(8)
-
 
 def update_user_messages(user):
     if user.first_message is None:
@@ -49,7 +50,15 @@ def update_user_messages(user):
     user.save()
 
 
+# Avoid hitting the api or the db too much too fast
+update_user_pool = None
+
 def handle_users(response, client):
+    global update_user_pool
+    # We need to initialize it here so we are sure this is done in the right process.
+    if update_user_pool is None:
+        update_user_pool = ThreadPool(8)
+
     users_module = client.get_module('users')
 
     user = response.response_from
