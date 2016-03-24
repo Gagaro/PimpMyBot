@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block head_title %}Custom commands{% endblock %}
+{% block title %}Custom commands{% endblock %}
+
+{% block content %}
+<form action="{{ url('custom_commands:settings') }}" method="post" role="form">
+    <div class="panel panel-default">
+        <div class="panel-heading">Custom commands</div>
+        <div class="panel-body">
+            {% if not commands %}
+            <p>No command yet, add a new one now:</p>
+            {% else %}
+                {% for command in commands %}
+                    {{ command }} TODO
+                {% endfor %}
+            {% endif %}
+            <div class="form-group">
+                <a href="{{ url('custom_commands:add_command') }}" class="btn btn-primary"><i class="fa fa-fw fa-plus"></i></a>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

@@ -3,6 +3,7 @@ from __future__ import absolute_import, unicode_literals
 import schedule
 
 from utils.modules import BaseModule
+from utils.modules.parameters import CharParameter
 from utils.translations import _
 from utils import db
 
@@ -26,6 +27,16 @@ class UsersModule(BaseModule):
     current_users = {}
 
     handlers = [handle_users]
+
+    api = [
+        {
+            'title': _('Timeout user'),
+            'method': lambda: None,
+            'parameters': {
+                'todo': CharParameter(),
+            }
+        },
+    ]
 
     def __init__(self):
         schedule.every().minute.do(update_users_time_watched, self)

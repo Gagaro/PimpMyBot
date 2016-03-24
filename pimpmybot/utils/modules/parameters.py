@@ -2,31 +2,30 @@
 
 
 class BaseParameter(object):
-    @staticmethod
-    def normalize(value):
+    def __init__(self, **kwargs):
+        self.title = kwargs.get('title', '')
+        self.help_text = kwargs.get('help_text', '')
+
+    def normalize(self, value):
         """ Convert the value from the form input to python. """
         return value
 
-    @staticmethod
-    def render(name, value=None):
+    def render(self, name, value=None):
         """ HTML input rendering. """
         raise NotImplementedError
 
 
 class CharParameter(BaseParameter):
-    @staticmethod
-    def render(name, value=''):
+    def render(self, name, value=''):
         return '<input class="form-control" name="{0}" value="{1}" />'.format(name, value)
 
 
 class IntParameter(BaseParameter):
-    @staticmethod
-    def normalize(value):
+    def normalize(self, value):
         try:
             return int(value)
         except ValueError:
             return 0
 
-    @staticmethod
-    def render(name, value=0):
+    def render(self, name, value=0):
         return '<input type="int" class="form-control" name="{0}" value="{1}" />'.format(name, value)
