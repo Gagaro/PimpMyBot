@@ -1,6 +1,12 @@
-<div class="form-group">
-    <label>{{ title }}</label>
-    <button class="btn btn-danger remove-action"><i class="fa fa-times"></i></button>
-    <input type="text" class="form-control" name="action">
-    TODO
+<div class="form-group action">
+    <label>{{ action.title }}</label>
+    <input type="hidden" name="_action_type" value="{{ action_type }}">
+    <div class="input-group btn-group parameters">
+        <div class="input-group-addon"><i class="fa fa-arrows-v"></i></div>
+        {% for parameter in action.parameters %}
+            <div class="input-group-addon">{{ parameter.title }}</div>
+            {{ parameter.render() | safe }}
+        {% endfor %}
+        <span class="input-group-btn"><button class="btn btn-danger remove-action"><i class="fa fa-times"></i></button></span>
+    </div>
 </div>

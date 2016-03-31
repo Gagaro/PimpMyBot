@@ -8,12 +8,12 @@ def send_message(client, message):
     raise NotImplementedError
 
 
-api = [
-    {
+api = {
+    'send_message': {
         'title': _('Send a message'),
         'method': send_message,
-        'parameters': {
-            'message': CharParameter(),
-        }
+        'parameters': [
+            CharParameter('message', title="Message"),
+        ]
     },
-]
+}

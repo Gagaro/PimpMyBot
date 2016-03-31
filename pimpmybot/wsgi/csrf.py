@@ -49,8 +49,9 @@ def require_csrf(callback):
             if csrf is None:
                 csrf = request.forms.get(CSRF_TOKEN, None)
             if csrf is None or csrf != token_csrf:
-                abort(400)
-        generate_csrf_token()
+                abort(400, 'CSRF')
+        if not request.is_ajax:
+            generate_csrf_token()
         body = callback(*args, **kwargs)
         return body
 

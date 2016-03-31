@@ -32,7 +32,19 @@ def commands_add():
     }
 
 
+@route('/commands/add', name='commands:add_command', method="POST")
+@jinja2_view('commands/command_add_form')
+def commands_add_post():
+    # TODO
+    return {}
+
+
 @route('/commands/action_input', name='commands:action_input')
 @jinja2_view('commands/action_input')
 def commands_action_input():
-    return {}
+    module, method = request.query['action'].split('|')
+    action = get_apis()[module]['api'][method]
+    return {
+        'action_type': request.query['action'],
+        'action': action
+    }

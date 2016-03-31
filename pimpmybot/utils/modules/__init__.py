@@ -74,19 +74,19 @@ class BaseModule(object):
     @property
     def api(self):
         """
-        List of methods exposed by this module.
+        Dict of methods exposed by this module.
 
         :example:
 
         def square_root(irc_client, number):
             return number * number
 
-        {
+        'square_root' : {
             'title': 'Square Root',
             'method': square_root,
-            'parameters': {
-                'number': IntParameter(),
-            }
+            'parameters': [
+                IntParameter('number'),
+            ]
         }
         """
         return []

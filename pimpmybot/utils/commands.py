@@ -1,6 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
-from peewee import Model, CharField, ForeignKeyField
+from peewee import Model, CharField, ForeignKeyField, IntegerField
 
 from utils.modules import BaseModule
 from utils import db
@@ -31,3 +31,4 @@ class CommandAction(Model):
 
     command = ForeignKeyField(Command)
     action = ForeignKeyField(Action)
+    order = IntegerField(default=0)

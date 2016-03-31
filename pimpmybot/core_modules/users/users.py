@@ -28,16 +28,6 @@ class UsersModule(BaseModule):
 
     handlers = [handle_users]
 
-    api = [
-        {
-            'title': _('Timeout user'),
-            'method': lambda: None,
-            'parameters': {
-                'todo': CharParameter(),
-            }
-        },
-    ]
-
     def __init__(self):
         schedule.every().minute.do(update_users_time_watched, self)
 
