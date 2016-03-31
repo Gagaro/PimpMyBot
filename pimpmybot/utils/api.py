@@ -1,3 +1,6 @@
+"""
+Class helpers to help interacting with Twitch api.
+"""
 import dateutil.parser
 import requests
 

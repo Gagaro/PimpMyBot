@@ -1,6 +1,6 @@
 from __future__ import absolute_import, unicode_literals
 
-CORE_MODULES = ['ping', 'users', 'custom_commands']
+CORE_MODULES = ['ping', 'users']
 
 
 def install_core_modules():

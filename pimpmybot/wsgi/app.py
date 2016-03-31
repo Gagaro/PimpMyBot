@@ -7,6 +7,7 @@ import os
 from bottle import TEMPLATE_PATH, Bottle, debug
 
 from utils import db
+from utils.commands import Action, Command, CommandAction
 from utils.config import Configuration, ModuleConfiguration, WidgetConfiguration
 from utils.upgrades import upgrades
 from wsgi.csrf import require_csrf
@@ -66,7 +67,10 @@ class App(Bottle):
             # The database has not been created yet, let's do it.
             from core_modules import install_core_modules
 
-            db.create_tables([Configuration, ModuleConfiguration, WidgetConfiguration])
+            db.create_tables([
+                Configuration, ModuleConfiguration, WidgetConfiguration,
+                Command, Action, CommandAction,
+            ])
             Configuration.create(
                 secret=hashlib.sha256(os.urandom(16)).hexdigest(),
                 upgrades=len(upgrades),

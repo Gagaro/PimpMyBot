@@ -4,7 +4,7 @@
 {% block title %}{% trans %}Add a new command{% endtrans %}{% endblock %}
 
 {% block content %}
-<form action="{{ url('custom_commands:add_command') }}" method="post" role="form">
+<form action="{{ url('commands:add_command') }}" method="post" role="form">
     <div class="panel panel-default">
         <div class="panel-heading">{% trans %}New command{% endtrans %}</div>
         <div class="panel-body">
@@ -46,7 +46,7 @@
 $(document).ready(function() {
     $('button#add-action').click(function(e) {
         var action = $('select[name="action"]').val();
-        var url = "{{ url('custom_commands:action_input') }}";
+        var url = "{{ url('commands:action_input') }}";
 
         e.preventDefault();
         e.stopPropagation();
