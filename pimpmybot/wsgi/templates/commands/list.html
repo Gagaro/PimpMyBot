@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block head_title %}Commands{% endblock %}
+{% block title %}Commands{% endblock %}
+
+{% block content %}
+<form action="{{ url('commands:list') }}" method="post" role="form">
+    <div class="panel panel-default">
+        <div class="panel-heading">Commands</div>
+        <div class="panel-body">
+            {% for command in commands %}
+            <div>
+                <strong>!{{ command.command }}</strong>
+                <ul>
+                    {% for action in command.get_actions() %}
+                    <li>{{ action.method }} - {{ action.parameters }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% else %}
+            <p>No command yet, add a new one now:</p>
+            {% endfor %}
+            <div class="form-group">
+                <a href="{{ url('commands:add') }}" class="btn btn-primary"><i class="fa fa-fw fa-plus"></i></a>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

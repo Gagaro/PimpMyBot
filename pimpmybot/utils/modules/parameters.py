@@ -18,7 +18,7 @@ class BaseParameter(object):
 
 class CharParameter(BaseParameter):
     def render(self, value=''):
-        return '<input class="form-control" name="{0}" value="{1}" />'.format(self.name, value)
+        return '<input class="form-control" name="{0}" value="{1}" required />'.format(self.name, value)
 
 
 class IntParameter(BaseParameter):
@@ -29,4 +29,4 @@ class IntParameter(BaseParameter):
             return 0
 
     def render(self, name, value=0):
-        return '<input type="int" class="form-control" name="{0}" value="{1}" />'.format(self.name, value)
+        return '<input type="int" class="form-control" name="{0}" value="{1}" required />'.format(self.name, value)

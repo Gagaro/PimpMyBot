@@ -2,7 +2,8 @@ from __future__ import absolute_import, unicode_literals
 
 from peewee import Model, CharField, ForeignKeyField, IntegerField
 
-from utils.modules import BaseModule
+from utils.modules import BaseModule, modules
+from utils.modules.api import api as pmb_api
 from utils import db
 
 
@@ -24,6 +25,16 @@ class Command(Model):
 
     command = CharField(unique=True)
 
+    def get_actions(self):
+        return (
+            Action
+                .select()
+                .join(CommandAction)
+                .join(Command)
+                .where(Command.id == self.id)
+                .order_by(CommandAction.order)
+        )
+
 
 class CommandAction(Model):
     class Meta:
@@ -32,3 +43,11 @@ class CommandAction(Model):
     command = ForeignKeyField(Command)
     action = ForeignKeyField(Action)
     order = IntegerField(default=0)
+
+
+def get_method_from_module(module, command):
+    if module == '__pmb':
+        api = pmb_api
+    else:
+        api = modules[module].api
+    return api[command]
