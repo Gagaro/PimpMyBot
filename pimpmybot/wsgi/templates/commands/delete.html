@@ -1,0 +1,12 @@
+{% extends 'modal_base.html' %}
+
+{% block modal_title %}Delete{% endblock %}
+
+{% block modal_body %}Are you sure you want to delete the "{{ command.command }}" command?{% endblock %}
+
+{% block modal_footer %}
+<form action="{{url('commands:delete', id=command.id) }}" method="POST">
+<a href="#" class="btn btn-default" data-dismiss="modal">No</a>
+<button type="submit" class="btn btn-danger">Yes</button>
+</form>
+{% endblock %}

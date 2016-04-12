@@ -6,11 +6,22 @@
 {% block content %}
 <form action="{{ url('commands:list') }}" method="post" role="form">
     <div class="panel panel-default">
-        <div class="panel-heading">Commands</div>
+        <div class="panel-heading"><a href="{{ url('commands:add') }}" class="btn btn-sm btn-primary"><i class="fa fa-fw fa-plus"></i></a> Commands</div>
         <div class="panel-body">
             {% for command in commands %}
             <div>
-                <strong>!{{ command.command }}</strong>
+                <p>
+                    <div class="btn-group">
+                        <a href="{{ url('commands:edit', id=command.id) }}" class="btn btn-xs btn-default" title="Edit"><i class="fa fa-fw fa-pencil"></i></a>
+                        <button type="button" class="btn btn-xs btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{ url('commands:delete', id=command.id) }}" title="Delete" data-toggle="modal" data-target="#modal"><i class="fa fa-fw fa-times"></i> Delete</a></li>
+                        </ul>
+                    </div>
+                    <strong>!{{ command.command }}</strong></p>
                 <ul>
                     {% for action in command.get_actions() %}
                     <li>{{ action.method }} - {{ action.parameters }}</li>
@@ -18,11 +29,8 @@
                 </ul>
             </div>
             {% else %}
-            <p>No command yet, add a new one now:</p>
+            <p>No command yet, add a new one now.</p>
             {% endfor %}
-            <div class="form-group">
-                <a href="{{ url('commands:add') }}" class="btn btn-primary"><i class="fa fa-fw fa-plus"></i></a>
-            </div>
         </div>
     </div>
 </form>

@@ -41,10 +41,9 @@ def commands_add_post():
     with db.atomic():
         command = Command.create(command=data['command'])
         for i in range(int(data['actions_number'])):
+            # Each action has actionX prepended to its inputs
             namespace = 'action{0}'.format(i)
-
             module, method = data['{0}_action_type'.format(namespace)].split('|')
-
             parameters = {
                 key[len(namespace):]: value
                 for key, value in data.items()
@@ -53,6 +52,30 @@ def commands_add_post():
             action = Action.create(module=module, method=method, parameters=json.dumps(parameters))
             CommandAction.create(command=command, action=action, order=i)
         success(_("Command created."))
+    return redirect(app.get_url('commands:list'))
+
+
+@route('/commands/edit/<id:int>', name='commands:edit')
+@jinja2_view('commands/edit')
+def command_edit(id):
+    command = Command.get(id=id)
+    return {'command': command}
+
+
+@route('/commands/delete/<id:int>', name='commands:delete')
+@jinja2_view('commands/delete')
+def command_delete(id):
+    command = Command.get(id=id)
+    return {'command': command}
+
+
+@route('/commands/delete/<id:int>', name='commands:delete', method="POST")
+@jinja2_view('commands/delete')
+def command_delete(id):
+    if Command.get(id=id).delete_instance():
+        success(_("Command deleted."))
+    else:
+        danger(_("Error while deleting command."))
     return redirect(app.get_url('commands:list'))
 
 

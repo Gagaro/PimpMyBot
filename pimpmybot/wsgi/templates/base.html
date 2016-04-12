@@ -143,6 +143,33 @@
     </div>
     <!-- /#wrapper -->
 
+
+    <div id="modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modal-title">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+          <!-- This part will be replaced via AJAX request -->
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title" id="modal-title">Loading</h4>
+          </div>
+
+          <div class="modal-body">
+            <i class="fa fa-spinner fa-spin"></i>
+          </div>
+
+          <div class="modal-footer">
+          </div>
+          <!-- /This part will be replaced via AJAX request -->
+
+        </div>
+      </div>
+    </div>
+    <!-- /#modal -->
+
+
     <!-- jQuery -->
     <script src="/static/bower_components/jquery/dist/jquery.min.js"></script>
 

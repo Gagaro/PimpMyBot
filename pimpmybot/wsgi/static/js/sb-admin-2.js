@@ -36,14 +36,59 @@ $(function() {
 });
 
 // Handle CSRF
+var add_csrf_token = function(selector) {
+    var csrf_token = $('body').attr('data-csrf');
+
+    $(selector).find('form').prepend('<input type="hidden" name="_csrf_token" value="'+ csrf_token +'" />');
+};
+
 $(function() {
     var csrf_token = $('body').attr('data-csrf');
 
-    $('form').prepend('<input type="hidden" name="_csrf_token" value="'+ csrf_token +'" />');
+    add_csrf_token(document);
 
     $.ajaxSetup({
         beforeSend: function (xhr) {
             xhr.setRequestHeader('X-CsrfToken', csrf_token);
         }
     });
+});
+
+/************************************************
+ * MODAL
+ ************************************************/
+
+$('#modal').data('loading-html', $('#modal').html());
+
+// Remove data so it will load new content.
+$('body').on('hidden.bs.modal', '#modal', function () {
+  $(this).removeData('bs.modal');
+  $('#modal').html($('#modal').data('loading-html'));
+});
+
+$('body').on('loaded.bs.modal', '#modal', function () {
+  /**
+   ** Can be HTML or JSON body with the following attributes :
+   **
+   ** {
+   **    "html": "Html to display in the modal",
+   **    "redirect": "url to redirect to"
+   **    "hide": true/false
+   ** }
+   **/
+
+  try {
+    var json = $(this).find('.modal-content').html();
+    json = JSON.parse(json);
+
+    $(this).find('.modal-content').html(json.html);
+    if (json.redirect) {
+      window.location = json.redirect;
+    }
+    if (json.hide) {
+      $(this).modal('hide');
+    }
+  } catch (e) {/* No JSON */}
+
+    add_csrf_token($(this));
 });
