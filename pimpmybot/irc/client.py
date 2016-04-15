@@ -8,6 +8,7 @@ import schedule
 import six
 import time
 
+from irc.handlers import handle_connexion, handle_commands
 from irc.parser import Response, InvalidResponse
 from irc.sender import Sender
 from utils.config import Configuration
@@ -21,20 +22,6 @@ HOST = 'irc.twitch.tv'
 PORT = 6667
 
 
-def handle_connexion(response, client):
-    """
-    Activate twitch capabilities and join channel.
-    """
-    if response.command != '001':
-        return
-
-    client.send('CAP REQ :twitch.tv/membership', type='raw')
-    client.send('CAP REQ :twitch.tv/commands', type='raw')
-    client.send('CAP REQ :twitch.tv/tags', type='raw')
-    client.send(None, type='join')
-    client.remove_handler(handle_connexion)
-
-
 class Client(object):
     """ Connect to IRC and dispatch the messages to the handlers. """
 
@@ -43,6 +30,7 @@ class Client(object):
         self.config = Configuration.get()
         self.socket = None
         self.handlers = []
+        self.add_handler(handle_commands)
         self.sender = Sender(self.config.channel)
         self.modules = {}
         self.load_modules()

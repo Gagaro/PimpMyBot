@@ -74,6 +74,7 @@ def command_delete(id):
 @jinja2_view('commands/delete')
 def command_delete(id):
     if Command.get(id=id).delete_instance():
+        CommandAction.delete().where(CommandAction.command == id).execute()
         success(_("Command deleted."))
     else:
         danger(_("Error while deleting command."))

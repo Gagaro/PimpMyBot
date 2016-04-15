@@ -4,8 +4,7 @@ from utils.translations import _
 
 
 def send_message(client, message):
-    # TODO
-    raise NotImplementedError
+    client.send(message)
 
 
 api = {
