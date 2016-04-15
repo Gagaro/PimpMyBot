@@ -45,9 +45,13 @@ class CommandAction(Model):
     order = IntegerField(default=0)
 
 
-def get_method_from_module(module, command):
+def get_action_info(action):
+    return get_info_from_module(action.module, action.method)
+
+
+def get_info_from_module(module, method):
     if module == '__pmb':
         api = pmb_api
     else:
         api = modules[module].api
-    return api[command]
+    return api[method]

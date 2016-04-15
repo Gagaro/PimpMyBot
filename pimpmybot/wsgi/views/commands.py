@@ -7,7 +7,7 @@ from bottle import request, TEMPLATE_PATH, redirect
 from peewee import IntegrityError
 
 from utils import db
-from utils.commands import Command, Action, CommandAction, get_method_from_module
+from utils.commands import Command, Action, CommandAction, get_action_info
 from utils.translations import _
 from wsgi import app
 from wsgi.messages import success, danger
@@ -20,10 +20,11 @@ route = app.route
 
 @route('/commands/', name='commands:list')
 @jinja2_view('commands/list')
-def commands_settings():
+def commands_list():
     commands = Command.select()
     return {
         'commands': commands,
+        'get_action_info': get_action_info,
     }
 
 

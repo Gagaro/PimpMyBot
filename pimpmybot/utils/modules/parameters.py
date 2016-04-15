@@ -11,13 +11,17 @@ class BaseParameter(object):
         """ Convert the value from the form input to python. """
         return value
 
-    def render(self, value=None):
+    def render(self, value):
+        """ Convert the python value to a printable one """
+        return str(value)
+
+    def input(self, value=None):
         """ HTML input rendering. """
         raise NotImplementedError
 
 
 class CharParameter(BaseParameter):
-    def render(self, value=''):
+    def input(self, value=''):
         return '<input class="form-control" name="{0}" value="{1}" required />'.format(self.name, value)
 
 
@@ -28,5 +32,5 @@ class IntParameter(BaseParameter):
         except ValueError:
             return 0
 
-    def render(self, name, value=0):
+    def input(self, name, value=0):
         return '<input type="int" class="form-control" name="{0}" value="{1}" required />'.format(self.name, value)

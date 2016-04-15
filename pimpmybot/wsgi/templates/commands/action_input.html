@@ -5,8 +5,9 @@
         <div class="input-group-addon"><i class="fa fa-arrows-v"></i></div>
         {% for parameter in action.parameters %}
             <div class="input-group-addon">{{ parameter.title }}</div>
-            {{ parameter.render() | safe }}
+            {{ parameter.input() | safe }}
         {% endfor %}
         <span class="input-group-btn"><button class="btn btn-danger remove-action"><i class="fa fa-times"></i></button></span>
     </div>
 </div>
+red
