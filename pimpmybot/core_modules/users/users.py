@@ -3,7 +3,6 @@ from __future__ import absolute_import, unicode_literals
 import schedule
 
 from utils.modules import BaseModule
-from utils.modules.parameters import CharParameter
 from utils.translations import _
 from utils import db
 
