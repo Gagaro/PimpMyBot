@@ -186,8 +186,8 @@ class ModulesList(dict):
                 #     logger.warning('Error importing {0}'.format(file))
                 except AttributeError:
                     pass
-                except ImportError:
-                    logger.debug("Could not import module '{0}'".format(file))
+                except ImportError as e:
+                    logger.debug("Could not import module '{0}': '{1}'".format(file, e))
                 else:
                     if isinstance(module, BaseModule):
                         logger.debug('Adding {0}'.format(module.identifier))
