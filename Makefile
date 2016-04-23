@@ -6,3 +6,6 @@ extract:
 
 compile:
     pybabel compile -D pimpmybot -d pimpmybot/locales/
+
+pyinstaller:
+    pyinstaller pimpmybot.spec
