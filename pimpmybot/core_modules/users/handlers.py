@@ -35,7 +35,7 @@ def update_user(username, users_module=None):
             )
         except IntegrityError:
             # Possible if there is a race condition
-            pass
+            user = User.get(User.username == username)
     if users_module is not None:
         # Update current user list
         users_module.current_users[user.username] = user
@@ -97,6 +97,8 @@ def handle_users(response, client):
         def handle_privmsg(user, users_module):
             if user not in users_module.current_users.keys():
                 user = update_user(user, users_module)
+            else:
+                user = users_module.current_users[user]
             update_user_messages(user)
             if user.type != user_type:
                 user.type = user_type
