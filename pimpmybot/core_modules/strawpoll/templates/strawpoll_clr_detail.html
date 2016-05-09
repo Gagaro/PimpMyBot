@@ -6,6 +6,11 @@
         <script src="/static/bower_components/flot/jquery.js"></script>
         <script src="/static/bower_components/flot/jquery.flot.js"></script>
         <script src="/static/bower_components/flot/jquery.flot.pie.js"></script>
+        <style>
+            body {
+                background-color: #00FF00;
+            }
+        </style>
     </head>
     <body>
         <div id="chart" style="width: 600px; height: 300px">Loading...</div>
@@ -19,7 +24,9 @@
                     }
 
                     var labelFormatter = function (label, series) {
-                        return "<div style='font-size:12pt; text-align:center; padding:2px; color:white;'>" + label + "<br/>" + Math.round(series.percent) + "%</div>";
+                        console.log(series);
+                        return "<div style='font-size:12pt; text-align:center; padding:2px; color:black;'>" + label
+                                + "<br/>"+ series.data[0][1] +" (" + Math.round(series.percent) + "%)</div>";
                     };
 
                     $("#chart").html('');

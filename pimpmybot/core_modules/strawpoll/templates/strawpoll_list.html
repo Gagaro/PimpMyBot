@@ -16,6 +16,7 @@
 <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#create-strawpoll">
   <i class="fa fa-plus"></i> {% trans %}Create poll{% endtrans %}
 </button>
+<a href="{{ url('strawpoll:clr_detail_last') }}" class="btn btn-default" target="_blank"><i class="fa fa-search"></i> Last poll</a>
 {% endif %}
 <div class="collapse {% if not polls %}in{% endif %}" id="create-strawpoll">
   <form class="form-horizontal" method="post" action="{{ url('strawpoll:list') }}">

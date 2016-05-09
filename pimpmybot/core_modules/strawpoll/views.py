@@ -48,9 +48,17 @@ def strawpoll_create():
 
 @route('/strawpoll/clr/<id:int>', name='strawpoll:clr_detail')
 @jinja2_view('strawpoll_clr_detail')
-def strawpoll_detail(id):
+def strawpoll_clr_detail(id):
     """ View to get detail on a single poll to show in clr browser """
     poll = Strawpoll.get(id=id)
+    return {'poll': poll, 'api_url': API_URL}
+
+
+@route('/strawpoll/clr/last', name='strawpoll:clr_detail_last')
+@jinja2_view('strawpoll_clr_detail')
+def strawpoll_clr_detail_last():
+    """ View to get detail on a last poll to show in clr browser """
+    poll = Strawpoll.select().order_by(Strawpoll.id.desc())[:1][0]
     return {'poll': poll, 'api_url': API_URL}
 
 
