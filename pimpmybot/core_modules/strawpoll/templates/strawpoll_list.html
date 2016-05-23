@@ -23,7 +23,8 @@
         <div class="input-group">
             <input type="text" class="form-control" name="poll_id" placeholder="Strawpoll number" required>
             <span class="input-group-btn">
-                <button class="btn btn-default" type="submit" name="goto"><i class="fa fa-search"></i> Stream widget</button>
+                <button class="btn btn-default" type="submit" name="chart" value="pie"><i class="fa fa-pie-chart"></i></button>
+                <button class="btn btn-default" type="submit" name="chart" value="bar"><i class="fa fa-bar-chart"></i></button>
             </span>
         </div>
     </form>
@@ -73,7 +74,10 @@
         <tr>
             <td><a href="http://www.strawpoll.me/{{ poll.id }}" target="_blank">{{ poll.title }}</a></td>
             <td><a href="http://www.strawpoll.me/{{ poll.id }}" target="_blank">http://www.strawpoll.me/{{ poll.id }}</a></td>
-            <td><a href="{{ url('strawpoll:stream_detail', id=poll.id) }}" target="_blank"><i class="fa fa-search"></i></a></td>
+            <td>
+                <a href="{{ url('strawpoll:stream_detail', id=poll.id) }}" target="_blank"><i class="fa fa-pie-chart"></i></a>
+                <a href="{{ url('strawpoll:stream_detail', id=poll.id) }}" target="_blank"><i class="fa fa-bar-chart"></i></a>
+            </td>
         </tr>
         {% endfor %}
     </tbody>

@@ -29,8 +29,9 @@ def strawpoll_list():
 @route('/strawpoll', name='strawpoll:list', method="POST")
 def strawpoll_create():
     """ View to create a new post """
-    if 'goto' in request.forms.keys():
-        return redirect(app.get_url('strawpoll:stream_detail', id=request.forms['poll_id']))
+    if 'chart' in request.forms.keys():
+        url = app.get_url('strawpoll:stream_detail', id=request.forms['poll_id'])
+        return redirect("{0}?chart={1}".format(url, request.forms['chart']))
     url = API_URL
     data = {
         'title': request.forms['title'],

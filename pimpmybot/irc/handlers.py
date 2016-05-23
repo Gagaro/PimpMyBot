@@ -30,7 +30,7 @@ def handle_commands(response, client):
     for action in command.get_actions():
         info = get_action_info(action)
         parameters = json.loads(action.parameters)
-        for parameter in info['parameters']:
+        for parameter in info.get('parameters', []):
             if parameter.name in [parameters.keys()]:
                 value = parameters[parameter.name]
                 parameters[parameter.name] = parameter.normalize(value)

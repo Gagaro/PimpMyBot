@@ -78,7 +78,7 @@ class BaseModule(object):
 
         :example:
 
-        def square_root(irc_client, number):
+        def square_root(client, number):
             return number * number
 
         'square_root' : {
