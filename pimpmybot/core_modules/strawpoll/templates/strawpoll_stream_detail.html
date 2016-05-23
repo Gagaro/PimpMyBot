@@ -13,41 +13,98 @@
         </style>
     </head>
     <body>
-        <div id="chart" style="width: 600px; height: 300px">Loading...</div>
+        <div id="chart" style="width: 400px; height: 200px">Loading...</div>
         <script>
+            // From http://stackoverflow.com/a/901144
+            var getParameterByName = function(name, url) {
+                if (!url) url = window.location.href;
+                name = name.replace(/[\[\]]/g, "\\$&");
+                var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                    results = regex.exec(url);
+                if (!results) return null;
+                if (!results[2]) return '';
+                return decodeURIComponent(results[2].replace(/\+/g, " "));
+            };
+
             var updatePoll = function() {
                 $.get('{{ url('strawpoll:ajax_detail', id=poll_id) }}').success(function (api_data) {
-
-                    var data = [];
-                    for (var i = 0; i < api_data.options.length; i++) {
-                        data.push({label: api_data.options[i], data: api_data.votes[i]});
-                    }
-
-                    var labelFormatter = function (label, series) {
-                        console.log(series);
-                        return "<div style='font-size:12pt; text-align:center; padding:2px; color:black;'>" + label
-                                + "<br/>"+ series.data[0][1] +" (" + Math.round(series.percent) + "%)</div>";
-                    };
-
                     $("#chart").html('');
 
-                    $.plot($("#chart"), data, {
-                        series: {
-                            pie: {
-                                show: true,
-                                radius: 1,
-                                label: {
-                                    show: true,
-                                    radius: 2 / 3,
-                                    formatter: labelFormatter,
-                                    threshold: 0.1
-                                }
+                    if (getParameterByName('chart') == 'bar') {
+                        // Bar Chart
+                        var labelFormatter = function (label) {
+                            if (label.length > 15) {
+                                label = label.substring(0, 15) + '...';
                             }
-                        },
-                        legend: {
-                            show: false
+                            return label;
+                        };
+
+                        var data = [];
+                        var ticks = [];
+                        for (var i = 0; i < api_data.options.length; i++) {
+                            data.push({label: api_data.options[i], data: [[i, api_data.votes[i]]]});
+                            ticks.push([i, labelFormatter(api_data.options[i])]);
                         }
-                    });
+
+
+
+                        $.plot($("#chart"), data, {
+                            series: {
+                                bars: {
+                                    show: true,
+                                    align: "center",
+                                    barWidth: 0.8,
+                                    fill: true,
+                                    fillColor: { colors: [ { opacity: 1 }, { opacity: 1 } ] },
+                                }
+                            },
+                            xaxis: {
+                                ticks: ticks,
+                            },
+                            yaxis: {
+                                show: false,
+                                minTickSize: 1,
+                                tickDecimals: 0
+                            },
+                            grid: {
+                                show: true,
+                                borderWidth: 0,
+                                color: '#00FF00',
+                            },
+                            legend: {
+                                show: false,
+                            }
+                        });
+                    } else {
+                        // Pie Chart
+                        var data = [];
+                        for (var i = 0; i < api_data.options.length; i++) {
+                            data.push({label: api_data.options[i], data: api_data.votes[i]});
+                        }
+
+                        var labelFormatter = function (label, series) {
+                            if (label.length > 27) {
+                                label = label.substring(0, 27) + '...';
+                            }
+                            return label;
+                        };
+
+                        $.plot($("#chart"), data, {
+                            series: {
+                                pie: {
+                                    show: true,
+                                    stroke: {
+                                        color: '#00FF00'
+                                    }
+                                }
+                            },
+                            legend: {
+                                labelFormatter: labelFormatter,
+                                show: true,
+                                backgroundOpacity: 0
+                            }
+                        });
+                    }
 
                     setTimeout(updatePoll, 3000);
                 });
