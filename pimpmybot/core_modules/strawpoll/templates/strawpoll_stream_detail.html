@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>{{ poll.title }}</title>
+        <title>{% if poll %}{{ poll.title }}{% else %}Strawpoll {{ poll_id }}{% endif %}</title>
         <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="/static/bower_components/flot/excanvas.min.js"></script><![endif]-->
         <script src="/static/bower_components/flot/jquery.js"></script>
         <script src="/static/bower_components/flot/jquery.flot.js"></script>
@@ -16,7 +16,7 @@
         <div id="chart" style="width: 600px; height: 300px">Loading...</div>
         <script>
             var updatePoll = function() {
-                $.get('{{ url('strawpoll:ajax_detail', id=poll.id) }}').success(function (api_data) {
+                $.get('{{ url('strawpoll:ajax_detail', id=poll_id) }}').success(function (api_data) {
 
                     var data = [];
                     for (var i = 0; i < api_data.options.length; i++) {

@@ -12,12 +12,23 @@
 
 {% block content %}
 
-{% if polls %}
-<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#create-strawpoll">
-  <i class="fa fa-plus"></i> {% trans %}Create poll{% endtrans %}
-</button>
-<a href="{{ url('strawpoll:clr_detail_last') }}" class="btn btn-default" target="_blank"><i class="fa fa-search"></i> Last poll</a>
-{% endif %}
+<div style="margin-bottom: 15px;">
+    {% if polls %}
+    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#create-strawpoll">
+      <i class="fa fa-plus"></i> {% trans %}Create poll{% endtrans %}
+    </button>
+    <a href="{{ url('strawpoll:stream_detail_last') }}" class="btn btn-default" target="_blank"><i class="fa fa-search"></i> Last poll</a>
+    {% endif %}
+    <form style="display: inline-block;" class="form-inline" method="post" action="{{ url('strawpoll:list') }}">
+        <div class="input-group">
+            <input type="text" class="form-control" name="poll_id" placeholder="Strawpoll number" required>
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="submit" name="goto"><i class="fa fa-search"></i> Stream widget</button>
+            </span>
+        </div>
+    </form>
+</div>
+
 <div class="collapse {% if not polls %}in{% endif %}" id="create-strawpoll">
   <form class="form-horizontal" method="post" action="{{ url('strawpoll:list') }}">
       <div class="form-group">
@@ -54,7 +65,7 @@
         <tr>
             <th>{% trans %}Poll{% endtrans %}</th>
             <th>{% trans %}Url{% endtrans %}</th>
-            <th>{% trans %}CLR{% endtrans %}</th>
+            <th>{% trans %}Stream Widget{% endtrans %}</th>
         </tr>
     </thead>
     <tbody>
@@ -62,7 +73,7 @@
         <tr>
             <td><a href="http://www.strawpoll.me/{{ poll.id }}" target="_blank">{{ poll.title }}</a></td>
             <td><a href="http://www.strawpoll.me/{{ poll.id }}" target="_blank">http://www.strawpoll.me/{{ poll.id }}</a></td>
-            <td><a href="{{ url('strawpoll:clr_detail', id=poll.id) }}" target="_blank"><i class="fa fa-search"></i></a></td>
+            <td><a href="{{ url('strawpoll:stream_detail', id=poll.id) }}" target="_blank"><i class="fa fa-search"></i></a></td>
         </tr>
         {% endfor %}
     </tbody>

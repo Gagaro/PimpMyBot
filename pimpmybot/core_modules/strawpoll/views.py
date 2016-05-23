@@ -29,6 +29,8 @@ def strawpoll_list():
 @route('/strawpoll', name='strawpoll:list', method="POST")
 def strawpoll_create():
     """ View to create a new post """
+    if 'goto' in request.forms.keys():
+        return redirect(app.get_url('strawpoll:stream_detail', id=request.forms['poll_id']))
     url = API_URL
     data = {
         'title': request.forms['title'],
@@ -46,16 +48,19 @@ def strawpoll_create():
     return redirect(app.get_url('strawpoll:list'))
 
 
-@route('/strawpoll/clr/<id:int>', name='strawpoll:clr_detail')
-@jinja2_view('strawpoll_clr_detail')
+@route('/strawpoll/stream/<id:int>', name='strawpoll:stream_detail')
+@jinja2_view('strawpoll_stream_detail')
 def strawpoll_clr_detail(id):
     """ View to get detail on a single poll to show in clr browser """
-    poll = Strawpoll.get(id=id)
-    return {'poll': poll, 'api_url': API_URL}
+    try:
+        poll = Strawpoll.get(id=id)
+    except Strawpoll.DoesNotExist:
+        poll = None
+    return {'poll': poll, 'poll_id': id, 'api_url': API_URL}
 
 
-@route('/strawpoll/clr/last', name='strawpoll:clr_detail_last')
-@jinja2_view('strawpoll_clr_detail')
+@route('/strawpoll/stream/last', name='strawpoll:stream_detail_last')
+@jinja2_view('strawpoll_stream_detail')
 def strawpoll_clr_detail_last():
     """ View to get detail on a last poll to show in clr browser """
     poll = Strawpoll.select().order_by(Strawpoll.id.desc())[:1][0]
