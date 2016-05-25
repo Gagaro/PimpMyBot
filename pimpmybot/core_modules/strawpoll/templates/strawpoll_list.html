@@ -54,6 +54,12 @@
 
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
+          <input type="checkbox" name="send_on_irc" id="input-send_on_irc" checked> <label for="input-send_on_irc">{% trans %}Send link on stream chat{% endtrans %}</label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
           <button type="submit" class="btn btn-primary">{% trans %}Create{% endtrans %}</button>
         </div>
       </div>
@@ -72,8 +78,8 @@
     <tbody>
         {% for poll in polls %}
         <tr>
-            <td><a href="http://www.strawpoll.me/{{ poll.id }}" target="_blank">{{ poll.title }}</a></td>
-            <td><a href="http://www.strawpoll.me/{{ poll.id }}" target="_blank">http://www.strawpoll.me/{{ poll.id }}</a></td>
+            <td><a href="poll.get_url()" target="_blank">{{ poll.title }}</a></td>
+            <td><a href="poll.get_url()" target="_blank">poll.get_url()</a></td>
             <td>
                 <a href="{{ url('strawpoll:stream_detail', id=poll.id) }}" target="_blank"><i class="fa fa-pie-chart"></i></a>
                 <a href="{{ url('strawpoll:stream_detail', id=poll.id) }}" target="_blank"><i class="fa fa-bar-chart"></i></a>

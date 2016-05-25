@@ -38,6 +38,17 @@ class App(Bottle):
         self.restart_irc_bot()
         super(App, self).run()
 
+    def irc_send(self, action, parameters=None):
+        """
+        Send something to the irc process.
+
+        action must be one of : message
+        """
+        self.pipe.send({
+            'action': action,
+            'parameters': parameters,
+        })
+
     def get_messages(self):
         while self._messages:
             yield self._messages.pop()

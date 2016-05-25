@@ -68,7 +68,15 @@ class Client(object):
     def run(self):
         schedule_thread = Thread(target=self.handle_schedule)
         schedule_thread.start()
+        pipe_thread = Thread(target=self.handle_pipe)
+        pipe_thread.start()
         self.handle_server()
+
+    def handle_pipe(self):
+        while True:
+            action = self.pipe.recv()
+            if action['action'] == 'message':
+                self.send(action['parameters'])
 
     def handle_schedule(self):
         while True:

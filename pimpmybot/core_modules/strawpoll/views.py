@@ -42,10 +42,13 @@ def strawpoll_create():
     r = requests.post(url, data=json.dumps(data))
     if r.ok:
         data = r.json()
-        Strawpoll.create(id=data['id'], title=data['title'])
+        poll = Strawpoll.create(id=data['id'], title=data['title'])
+        if 'send_on_irc' in request.forms.keys():
+            message = "{0} {1}".format(poll.title, poll.get_url())
+            app.irc_send(action="message", parameters=message)
         success(_('Poll created successfully.'))
     else:
-        danger(_('Error while creating poll: {0}'.format(r.json().get('errorMessage', 'Unkown'))))
+        danger(_('Error while creating poll: {0}'.format(r.json().get('errorMessage', 'Unknown'))))
     return redirect(app.get_url('strawpoll:list'))
 
 

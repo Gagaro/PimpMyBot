@@ -9,3 +9,6 @@ class Strawpoll(Model):
 
     id = IntegerField(unique=True, null=False)
     title = CharField(null=False)
+
+    def get_url(self):
+        return "http://www.strawpoll.me/{0}".format(self.id)
