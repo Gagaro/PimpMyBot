@@ -3,11 +3,54 @@
 {% block head_title %}Users{% endblock %}
 {% block title %}Users{% endblock %}
 
-{% block css %}<link href="/static/bower_components/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet">{% endblock %}
+{% block css %}
+<link href="/static/bower_components/datatables/media/css/dataTables.bootstrap.min.css" rel="stylesheet">
+{% endblock %}
 
 {% block js %}
     <script src="/static/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
-    <script>$('table#users').DataTable()</script>
+    <script src="/static/bower_components/datatables/media/js/dataTables.bootstrap.min.js"></script>
+    <script>
+    $('table#users').DataTable({
+        order: [[2, "desc"]],
+        columnDefs: [{
+            targets: [1],
+            visible: false,
+            searchable: false
+        }, {
+            targets: [2],
+            orderData: [1]
+        }, {
+            targets: [4],
+            visible: false,
+            searchable: false
+        }, {
+            targets: [5],
+            orderData: [4]
+        }, {
+            targets: [6],
+            visible: false,
+            searchable: false
+        }, {
+            targets: [7],
+            orderData: [6]
+        }, {
+            targets: [8],
+            visible: false,
+            searchable: false
+        }, {
+            targets: [9],
+            orderData: [8]
+        }, {
+            targets: [10],
+            visible: false,
+            searchable: false
+        }, {
+            targets: [11],
+            orderData: [10]
+        }]
+    })
+    </script>
 {% endblock %}
 
 {% block content %}
@@ -15,11 +58,16 @@
     <thead>
         <tr>
             <th>User</th>
+            <th></th>
             <th>Time watched</th>
             <th>Messages count</th>
+            <th></th>
             <th>First watched</th>
+            <th></th>
             <th>Last watched</th>
+            <th></th>
             <th>First message</th>
+            <th></th>
             <th>Last message</th>
         </tr>
     </thead>
@@ -27,12 +75,17 @@
         {% for user in users %}
         <tr>
             <td>{{ user.display_name }}</td>
+            <td>{{ user.time_watched }}</td>
             <td>{{ user.time_watched }} seconds</td>
             <td>{{ user.messages_count }}</td>
+            <td>{{ user.first_watched.isoformat() }}</td>
             <td>{{ user.first_watched | datetimeformat }}</td>
+            <td>{{ user.last_watched.isoformat() }}</td>
             <td>{{ user.last_watched | datetimeformat }}</td>
-            <td>{{ user.first_message | datetimeformat }}</td>
-            <td>{{ user.last_message | datetimeformat }}</td>
+            <td>{% if user.first_message %}{{ user.first_message.isoformat() }}{% endif %}</td>
+            <td>{% if user.first_message %}{{ user.first_message | datetimeformat }}{% endif %}</td>
+            <td>{% if user.last_message %}{{ user.last_message.isoformat() }}{% endif %}</td>
+            <td>{% if user.last_message %}{{ user.last_message | datetimeformat }}{% endif %}</td>
         </tr>
         {% endfor %}
     </tbody>
