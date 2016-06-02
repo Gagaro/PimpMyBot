@@ -93,6 +93,7 @@ class BaseModule(object):
 
     @property
     def config(self):
+        """ Lazy loading of Configuration """
         if self._config is not None:
             return self._config
 
