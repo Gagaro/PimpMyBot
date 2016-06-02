@@ -109,6 +109,11 @@ class BaseModule(object):
         self.config.save()
         if not self.config.installed:
             self.install()
+        self.load()
+
+    def load(self):
+        """" Called at startup if the module is activated or at activation """
+        logger.debug('loading module {0}'.format(self.identifier))
 
     def deactivate(self):
         logger.debug('deactivating module {0}'.format(self.identifier))
@@ -193,6 +198,8 @@ class ModulesList(dict):
                     if isinstance(module, BaseModule):
                         logger.debug('Adding {0}'.format(module.identifier))
                         self[module.identifier] = module
+                        if module.config.activated:
+                            module.load()
         sys.path = saved_paths
         logger.debug("Loading all modules end.")
 

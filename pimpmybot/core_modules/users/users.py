@@ -27,9 +27,6 @@ class UsersModule(BaseModule):
 
     handlers = [handle_users]
 
-    def __init__(self):
-        schedule.every().minute.do(update_users_time_watched, self)
-
     @property
     def widgets(self):
         users_top5 = User.select().order_by(User.time_watched.desc())[:5]
@@ -40,6 +37,10 @@ class UsersModule(BaseModule):
                 'context': {'users': users_top5}
             },
         }
+
+    def load(self):
+        super(UsersModule, self).load()
+        schedule.every().minute.do(update_users_time_watched, self)
 
     def install(self):
         super(UsersModule, self).install()

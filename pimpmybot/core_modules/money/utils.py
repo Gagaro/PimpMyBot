@@ -1,7 +1,11 @@
-from .models import Money
-from core_modules.users.models import User  # TODO find a better way to import modules
+from .models import Money, MoneyConfiguration
 
 
 def get_user_money(user):
-    money = Money.get_or_create(user=user)
+    money, created = Money.get_or_create(user=user)
     return money
+
+
+def get_configuration():
+    config, created = MoneyConfiguration.get_or_create()
+    return config

@@ -99,7 +99,7 @@ class Client(object):
             for line in response.split('\n'):
                 line = line.strip()
                 if line:
-                    logger.debug('< {0}'.format(line))
+                    logger.debug('< {0}'.format(line.encode('utf8')))
                     try:
                         response = Response(line)
                     except InvalidResponse:
