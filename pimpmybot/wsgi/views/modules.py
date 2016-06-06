@@ -53,13 +53,9 @@ def modules_view_post():
 @route('/upgrades', name='upgrades')
 @jinja2_view('upgrades')
 def upgrades_view():
-    return {}
-
-
-@route('/upgrades', name='upgrades', method='POST')
-@jinja2_view('upgrades')
-def upgrades_view_post():
     for module in get_activated_modules():
         if module.need_upgrades():
             module.run_upgrades()
+            success('Module "{0}" upgraded.'.format(module.title))
+    success('All upgrades done.')
     return {}

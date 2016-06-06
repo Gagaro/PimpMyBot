@@ -123,9 +123,7 @@
             </div>
             <!-- /.row -->
             {% if need_upgrades() %}
-            <form action="{{ url('upgrades') }}" method="post">
-                <div class="alert alert-warning">Some modules need upgrades. <input class="btn btn-link" type="submit" value="Do it now" />.</div>
-            </form>
+                <div class="alert alert-warning">Some modules need upgrades. <a href="{{ url('upgrades') }}">Do it now</a>.</div>
             {% endif %}
 
             {% block messages %}
