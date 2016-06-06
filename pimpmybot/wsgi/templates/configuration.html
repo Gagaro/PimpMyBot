@@ -28,6 +28,14 @@
             </div>
 
             <div class="form-group">
+                <label>
+                    {% trans %}Send as /me{% endtrans %}
+                    <input type="checkbox" name="send_as_me" {% if config.send_as_me %}checked{% endif %} />
+                </label>
+                <p class="help-block">{% trans %}Reboot required.{% endtrans %}</p>
+            </div>
+
+            <div class="form-group">
                 <label>{% trans %}Language{% endtrans %}</label>
                 <select class="form-control" name="lang">
                     {% for language in languages -%}

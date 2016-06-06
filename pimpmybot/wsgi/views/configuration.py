@@ -26,8 +26,10 @@ def configuration_view_post():
     configuration.oauth = request.forms['oauth']
     configuration.channel = request.forms['channel']
     configuration.lang = request.forms['lang']
+    configuration.send_as_me = 'send_as_me' in request.forms.keys()
     configuration.save()
     success('Configuration saved')
+    # TODO send configuration reload required to IRC client
     return {
         'config': configuration,
         'languages': languages,

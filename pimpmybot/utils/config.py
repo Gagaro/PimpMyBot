@@ -16,6 +16,7 @@ class Configuration(Model):
     secret = CharField()
     upgrades = IntegerField()
     lang = CharField(default='en_US')
+    send_as_me = BooleanField(default=True)
 
     def get_activated_modules(self):
         return self.modules.select().where(ModuleConfiguration.activated == True)

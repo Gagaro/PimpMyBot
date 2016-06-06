@@ -57,6 +57,8 @@ class Client(object):
         self.send('NICK {0}'.format(self.config.username), type='raw')
 
     def send(self, message, type='privmsg'):
+        if type == 'privmsg' and self.config.send_as_me:
+            message = '\x01ACTION {0}\x01'.format(message)
         self.sender.send(self.socket, type, message)
 
     def send_buffer(self):
