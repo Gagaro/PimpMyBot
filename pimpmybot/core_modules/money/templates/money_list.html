@@ -5,14 +5,45 @@
 
 {% block css %}
 <link href="/static/bower_components/datatables/media/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<style>
+table#users .input {
+    display: none;
+}
+
+table#users .amount {
+    width: 100%;
+}
+</style>
 {% endblock %}
 
 {% block js %}
     <script src="/static/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
     <script src="/static/bower_components/datatables/media/js/dataTables.bootstrap.min.js"></script>
-    <script>$('table#users').DataTable({
+    <script>
+    $('table#users').DataTable({
         order: [[1, "desc"]]
-    });</script>
+    });
+    $('table#users td').click(function() {
+        $(this).find('span.amount').hide();
+        $(this).find('span.input').show();
+    });
+    $('table#users .input input').keypress(function(event) {
+        if ( event.which == 13 ) {
+            var url = '{{ url('money:ajax:user') }}';
+            var amount = $(this).val();
+            var user_id = $(this).attr('data-user-id');
+            var span = $(this).parent();
+
+            $.post(url, {
+                user_id: user_id,
+                amount: amount
+            }).done(function() {
+                span.hide();
+                span.siblings('.amount').html(amount).show();
+            });
+        }
+    });
+    </script>
 {% endblock %}
 
 {% block content %}
@@ -27,7 +58,10 @@
         {% for money in moneys %}
         <tr>
             <td>{{ money.user.display_name }}</td>
-            <td>{{ money.amount }}</td>
+            <td>
+                <span class="amount" title="{% trans %}Click to edit{% endtrans %}">{{ money.amount }}</span>
+                <span class="input"><input class="form-control" value="{{ money.amount }}" data-user-id="{{ money.user.id }}" title="{% trans %}Press enter to validate{% endtrans %}"></span>
+            </td>
         </tr>
         {% endfor %}
     </tbody>

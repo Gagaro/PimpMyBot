@@ -3,7 +3,7 @@ from __future__ import absolute_import, unicode_literals
 import json
 
 import requests
-from bottle import redirect, request
+from bottle import redirect, request, HTTPResponse
 
 from utils.translations import _
 from wsgi import app
@@ -23,7 +23,7 @@ def money_settings():
 
 @route('/money/settings', name='money:settings', method="POST")
 @jinja2_view('money_settings')
-def configuration_view_post():
+def money_settings_post():
     configuration = get_configuration()
     configuration.money_name = request.forms['money_name']
     configuration.amount_gain_inactive = request.forms['amount_gain_inactive']
@@ -35,10 +35,17 @@ def configuration_view_post():
     }
 
 
-
 @route('/money/list', name='money:list')
 @jinja2_view('money_list')
 def money_list():
     return {
         'moneys': Money.select()
     }
+
+
+@route('/money/user/', name='money:ajax:user', method='POST')
+def money_user_edit_ajax():
+    id = int(request.forms['user_id'])
+    amount = int(request.forms['amount'])
+    Money.update(amount=amount).where(Money.user == id).execute()
+    return HTTPResponse('OK')
