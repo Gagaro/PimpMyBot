@@ -22,6 +22,9 @@ class Money(Model):
 
 
 class MoneyConfiguration(Model):
+    class Meta:
+        database = db
+
     money_name = CharField(default="Magic Point", null=False)
 
     # Amount gained every 5 minutes

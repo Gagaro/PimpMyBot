@@ -10,6 +10,7 @@ from utils.translations import _
 
 from .models import Money, MoneyConfiguration, User
 from .utils import get_configuration, get_user_money
+from .upgrades import fix_money_configuration
 
 
 def current_user_money(response, client):
@@ -74,6 +75,8 @@ class MoneyModule(BaseModule):
             'method': current_user_money
         }
     }
+
+    upgrades = [fix_money_configuration]
 
     def load(self):
         super(MoneyModule, self).load()
