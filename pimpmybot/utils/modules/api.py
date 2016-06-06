@@ -3,7 +3,7 @@ from utils.modules.parameters import CharParameter
 from utils.translations import _
 
 
-def send_message(client, message):
+def send_message(response, client, message):
     client.send(message)
 
 

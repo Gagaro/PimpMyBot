@@ -12,7 +12,7 @@ from .models import Money, MoneyConfiguration, User
 from .utils import get_configuration, get_user_money
 
 
-def current_user_money(client):
+def current_user_money(response, client):
     pass
 
 

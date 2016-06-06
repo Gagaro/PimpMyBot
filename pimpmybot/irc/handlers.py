@@ -34,4 +34,4 @@ def handle_commands(response, client):
             if parameter.name in [parameters.keys()]:
                 value = parameters[parameter.name]
                 parameters[parameter.name] = parameter.normalize(value)
-        info['method'](client=client, **parameters)
+        info['method'](response=response, client=client, **parameters)
