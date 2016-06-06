@@ -13,7 +13,13 @@ from .utils import get_configuration, get_user_money
 
 
 def current_user_money(response, client):
-    pass
+    try:
+        user = User.get(User.username == response.response_from)
+    except User.DoesNotExist:
+        return
+    money = get_user_money(user)
+    config = get_configuration()
+    client.send('{0}, you have {1} {2}'.format(user.username, money.amount, config.money_name))
 
 
 def update_users_money():
