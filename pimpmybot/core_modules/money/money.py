@@ -80,7 +80,7 @@ class MoneyModule(BaseModule):
 
     def load(self):
         super(MoneyModule, self).load()
-        schedule.every(get_configuration().amount_gain_interval).seconds.do(update_users_money)
+        schedule.every(get_configuration().gain_interval).seconds.do(update_users_money)
 
     def install(self):
         super(MoneyModule, self).install()
