@@ -198,6 +198,8 @@ class ModulesList(dict):
                     if isinstance(module, BaseModule):
                         logger.debug('Adding {0}'.format(module.identifier))
                         self[module.identifier] = module
+                        if module.config.installed and module.need_upgrades():
+                            module.run_upgrades()
                         if module.config.activated:
                             module.load()
         sys.path = saved_paths

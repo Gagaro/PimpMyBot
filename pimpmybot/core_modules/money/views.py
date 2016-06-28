@@ -26,8 +26,9 @@ def money_settings():
 def money_settings_post():
     configuration = get_configuration()
     configuration.money_name = request.forms['money_name']
-    configuration.amount_gain_inactive = request.forms['amount_gain_inactive']
-    configuration.amount_gain_active = request.forms['amount_gain_active']
+    configuration.amount_gain_inactive = int(request.forms['amount_gain_inactive'])
+    configuration.amount_gain_active = int(request.forms['amount_gain_active'])
+    configuration.gain_interval = int(request.forms['gain_interval'])
     configuration.save()
     success('Configuration saved')
     return {

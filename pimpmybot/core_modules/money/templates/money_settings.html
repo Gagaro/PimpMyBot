@@ -16,13 +16,19 @@
             <div class="form-group">
                 <label>{% trans %}Amount gain when inactive{% endtrans %}</label>
                 <input class="form-control" name="amount_gain_inactive" value="{{ config.amount_gain_inactive }}" />
-                <p class="help-block">The amount of money gained every 5 minutes when inactive (not talking in chat).</p>
+                <p class="help-block">The amount of money gained every x seconds when inactive (not talking in chat).</p>
             </div>
 
             <div class="form-group">
                 <label>{% trans %}Amount gain when active{% endtrans %}</label>
                 <input class="form-control" name="amount_gain_active" value="{{ config.amount_gain_active }}" />
-                <p class="help-block">The amount of money gained every 5 minutes when active.</p>
+                <p class="help-block">The amount of money gained every x seconds when active.</p>
+            </div>
+
+            <div class="form-group">
+                <label>{% trans %}Gain interval{% endtrans %}</label>
+                <input class="form-control" name="gain_interval" value="{{ config.gain_interval }}" />
+                <p class="help-block">The interval in seconds between each gain (restart required).</p>
             </div>
 
             <input class="btn btn-primary" type="submit" value="Save" />

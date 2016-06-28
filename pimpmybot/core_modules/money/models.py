@@ -27,8 +27,11 @@ class MoneyConfiguration(Model):
 
     money_name = CharField(default="Magic Point", null=False)
 
-    # Amount gained every 5 minutes
+    # Amount gained every x seconds
     amount_gain_inactive = IntegerField(null=False, default=1)
 
-    # Amount gained every 5 minutes if the user talked in the chat
+    # Amount gained every x seconds if the user talked in the chat
     amount_gain_active = IntegerField(null=False, default=2)
+
+    # The amount of time in seconds between each gain
+    gain_interval = IntegerField(null=False, default=300)

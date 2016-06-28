@@ -10,7 +10,7 @@ from utils.translations import _
 
 from .models import Money, MoneyConfiguration, User
 from .utils import get_configuration, get_user_money
-from .upgrades import fix_money_configuration
+from .upgrades import fix_money_configuration, add_gain_interval
 
 
 def current_user_money(response, client):
@@ -76,11 +76,11 @@ class MoneyModule(BaseModule):
         }
     }
 
-    upgrades = [fix_money_configuration]
+    upgrades = [fix_money_configuration, add_gain_interval]
 
     def load(self):
         super(MoneyModule, self).load()
-        schedule.every(5).minutes.do(update_users_money)
+        schedule.every(get_configuration().amount_gain_interval).seconds.do(update_users_money)
 
     def install(self):
         super(MoneyModule, self).install()
