@@ -24,7 +24,7 @@
                     <strong>!{{ command.command }}</strong></p>
                 <ul>
                     {% for action in command.get_actions() %}
-                    <li>{{ action.method }} - {{ action.parameters }}</li>
+                    <li>{{ action.get_info()['title'] }}{% for parameter in action.get_info()['parameters'] %} - <strong>{{ parameter.title }}</strong>: {{ action.get_parameters()[parameter.name] }}{% endfor %}</li>
                     {% endfor %}
                 </ul>
             </div>
