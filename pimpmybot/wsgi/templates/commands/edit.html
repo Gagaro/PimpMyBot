@@ -1,2 +1,112 @@
-EDIT TODO
-{{ command }}
+{% extends 'base.html' %}
+
+{% block head_title %}{% trans %}Command !{% endtrans %}{{ command.command }}{% endblock %}
+{% block title %}{% trans %}Command !{% endtrans %}{{ command.command }}{% endblock %}
+
+{% block css %}
+<!-- Dragula CSS -->
+<link href="/static/bower_components/dragula.js/dist/dragula.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<form id="add_action" action="{{ url('commands:edit', id=command.id) }}" method="post" role="form">
+    <div class="panel panel-default">
+        <div class="panel-heading">{% trans %}Command{% endtrans %}</div>
+        <div class="panel-body">
+            <div class="form-group">
+                <label>{% trans %}Command{% endtrans %}</label>
+                <div class="input-group btn-group">
+                    <div class="input-group-addon"><i class="fa fa-fw fa-exclamation"></i></div>
+                    <input type="text" class="form-control" name="command" value="{{ command.command }}" required>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">{% trans %}Actions{% endtrans %}</div>
+        <div class="panel-body">
+            <div class="form-group">
+                <div class="input-group btn-group">
+                    <span class="input-group-btn"><button id="add-action" class="btn btn-success"><i class="fa fa-fw fa-plus"></i></button></span>
+                    <select class="form-control" name="action" readonly>
+                        <option value="" selected>-----</option>
+                        {% for module, module_api in apis.items() -%}
+                        <optgroup label="{{ module_api['title'] }}">
+                            {% for name, method in module_api['api'].items() -%}
+                            <option value="{{ module }}|{{ name }}">{{ method['title'] }}</option>
+                            {%- endfor %}
+                        </optgroup>
+                        {%- endfor %}
+                    </select>
+                    <input name="actions_number" value="{{ command.get_actions() | length }}" type="hidden">
+                </div>
+            </div>
+
+            <div id="actions">
+                {% for action in command.get_actions() %}
+                <div class="form-group action">
+                    <label>{{ action.get_info()['title'] }}</label>
+                    <input type="hidden" name="_action_type" value="{{ action.module }}|{{ action.method }}">
+                    <div class="input-group btn-group parameters">
+                        <div class="input-group-addon"><i class="fa fa-arrows-v"></i></div>
+                        {% for parameter in action.get_info()['parameters'] %}
+                            <div class="input-group-addon">{{ parameter.title }}</div>
+                            {{ parameter.input(action.get_parameters()[parameter.name]) | safe }}
+                        {% endfor %}
+                        <span class="input-group-btn"><button class="btn btn-danger remove-action"><i class="fa fa-times"></i></button></span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <input class="btn btn-primary" type="submit" value="{% trans %}Save{% endtrans %}" />
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block js %}
+<!-- Dragula JavaScript -->
+<script src="/static/bower_components/dragula.js/dist/dragula.min.js"></script>
+
+<!-- Command JavaScript -->
+<script>
+$(document).ready(function() {
+    dragula([document.getElementById('actions')]);
+
+    $('button#add-action').click(function(e) {
+        var action = $('select[name="action"]').val();
+        var url = "{{ url('commands:action_input') }}";
+
+        e.preventDefault();
+        e.stopPropagation();
+        $.ajax({
+            url: url,
+            data: {action: action},
+        })
+        .done(function(data) {
+            $('div#actions').append(data);
+        });
+    });
+
+    $('div#actions').on('click', 'button.remove-action', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        $(this).parents('.action').remove();
+    });
+
+    $('form#add_action').submit(function() {
+        var i = 0;
+        $('div#actions div.action').each(function(){
+            $(this).find('input').each(function() {
+                $(this).attr('name', 'action' + i + $(this).attr('name'));
+            });
+            i++;
+        });
+        $('input[name="actions_number"]').val($('div#actions div.action').length)
+    });
+});
+</script>
+{% endblock %}

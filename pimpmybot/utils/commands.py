@@ -1,5 +1,8 @@
 from __future__ import absolute_import, unicode_literals
 
+from copy import copy
+import json
+
 from peewee import Model, CharField, ForeignKeyField, IntegerField
 
 from utils.modules import BaseModule, modules
@@ -18,6 +21,12 @@ class Action(Model):
     # JSON encoded parameters
     parameters = CharField()
 
+    def get_info(self):
+        return get_action_info(self)
+
+    def get_parameters(self):
+        return json.loads(self.parameters)
+
 
 class Command(Model):
     class Meta:
@@ -34,6 +43,16 @@ class Command(Model):
                 .where(Command.id == self.id)
                 .order_by(CommandAction.order)
         )
+
+    def clear_actions(self):
+        for action in self.get_actions():
+            action.delete_instance()
+        for commandaction in (
+                CommandAction.select()
+                    .join(Command)
+                    .where(Command.id == self.id)
+                ):
+            commandaction.delete_instance()
 
 
 class CommandAction(Model):

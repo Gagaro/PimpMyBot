@@ -37,8 +37,15 @@ def commands_add():
 
 
 @route('/commands/add', name='commands:add', method="POST")
+@jinja2_view('commands/add')
 def commands_add_post():
     data = request.forms
+    if ' ' in data['command']:
+        danger(_("Spaces are not allowed in commands."))
+        return {
+            'apis': get_apis(),
+            'data': data,
+        }
     with db.atomic():
         command = Command.create(command=data['command'])
         for i in range(int(data['actions_number'])):
@@ -60,7 +67,41 @@ def commands_add_post():
 @jinja2_view('commands/edit')
 def command_edit(id):
     command = Command.get(id=id)
-    return {'command': command}
+    return {
+        'apis': get_apis(),
+        'command': command
+    }
+
+
+@route('/commands/edit/<id:int>', name='commands:edit', method="POST")
+@jinja2_view('commands/edit')
+def command_edit_post(id):
+    command = Command.get(id=id)
+    data = request.forms
+    if ' ' in data['command']:
+        danger(_("Spaces are not allowed in commands."))
+        # TODO Redirect to the edit page
+        return {
+            'apis': get_apis(),
+            'data': data,
+        }
+    with db.atomic():
+        command.command = data['command']
+        command.save()
+        command.clear_actions()
+        for i in range(int(data['actions_number'])):
+            # Each action has actionX prepended to its inputs
+            namespace = 'action{0}'.format(i)
+            module, method = data['{0}_action_type'.format(namespace)].split('|')
+            parameters = {
+                key[len(namespace):]: value
+                for key, value in data.items()
+                if key.startswith(namespace) and not key.endswith('_action_type')
+            }
+            action = Action.create(module=module, method=method, parameters=json.dumps(parameters))
+            CommandAction.create(command=command, action=action, order=i)
+        success(_("Command edited."))
+    return redirect(app.get_url('commands:list'))
 
 
 @route('/commands/delete/<id:int>', name='commands:delete')
