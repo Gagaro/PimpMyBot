@@ -62,11 +62,10 @@
     <tbody>
         {% for item in items %}
         <tr>
-            <td>{{ item.name }}</td>
+            <td><a href="{{ url('shop:item_detail', item_id=item.id) }}">{{ item.name }}</a></td>
             <td>{{ item.price }}</td>
             <td><i class="fa fa-{% if item.active %}check text-success{% else %}times text-danger{% endif %}"></i></td>
             <td>
-                <a href="{{ url('shop:item_detail', item_id=item.id) }}"><i class="fa fa-list"></i></a>
                 <a href="{{ url('shop:item_detail', item_id=item.id) }}"><i class="fa fa-pencil"></i></a>
             </td>
         </tr>

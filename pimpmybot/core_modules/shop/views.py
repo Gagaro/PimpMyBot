@@ -44,10 +44,12 @@ def shop_edit_item(item_id):
 
 
 @route('/shop/item/<item_id:int>/', name='shop:item_detail')
-@jinja2_view('shop_items')
-def shop_list_item_bought(item_id):
-    # TODO
-    return {}
+@jinja2_view('shop_item_detail')
+def shop_list_item_detail(item_id):
+    item = ShopItem.get(id=item_id)
+    return {
+        'item': item
+    }
 
 
 @route('/shop/bought/<bought_id:int>/', name='money:ajax:user', method='PUT')

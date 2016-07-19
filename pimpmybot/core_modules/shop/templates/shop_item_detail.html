@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block head_title %}Shop - {{ item.name }}{% endblock %}
+{% block title %}Shop - {{ item.name }}{% endblock %}
+
+{% block css %}
+<link href="/static/bower_components/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block js %}
+<script src="/static/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+<script>$('table#transactions').DataTable()</script>
+{% endblock %}
+
+{% block content %}
+{% if item.transactions %}
+<table id="transactions" class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>{% trans %}User{% endtrans %}</th>
+            <th>{% trans %}Date{% endtrans %}</th>
+            <th>{% trans %}Validated{% endtrans %}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for transaction in item.transactions %}
+        <tr>
+            <td>{{ transaction.user.display_name }}</td>
+            <td>{{ transaction.datetime | datetimeformat }}</td>
+            <td><i class="fa fa-{% if transaction.validated %}check text-success{% else %}times text-danger{% endif %}"></i></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+{% endblock %}

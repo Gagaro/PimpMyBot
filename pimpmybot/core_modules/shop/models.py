@@ -13,6 +13,10 @@ class ShopItem(Model):
     price = IntegerField(null=False, default=0)
     active = BooleanField(default=True)
 
+    @property
+    def transactions(self):
+        return self.bought_items.select().order_by(BoughtItem.datetime.desc())
+
 
 class BoughtItem(Model):
     class Meta:
