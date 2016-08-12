@@ -9,7 +9,28 @@
 
 {% block js %}
 <script src="/static/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
-<script>$('table#transactions').DataTable()</script>
+<script>
+$('table#transactions').DataTable()
+
+$('.bought-validated').click(function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    var $icon = $(this).find('i');
+
+    $.ajax($(this).attr('href'), {method: 'PUT'})
+        .done(function() {
+            if ($icon.hasClass('fa-check')) {
+                $icon.attr('class', 'fa fa-times text-danger');
+            } else {
+                $icon.attr('class', 'fa fa-check text-success');
+            }
+        })
+        .fail(function(e){
+            console.log(e);
+        });
+});
+</script>
 {% endblock %}
 
 {% block content %}
@@ -19,7 +40,7 @@
         <tr>
             <th>{% trans %}User{% endtrans %}</th>
             <th>{% trans %}Date{% endtrans %}</th>
-            <th>{% trans %}Validated{% endtrans %}</th>
+            <th>{% trans %}Validated (click to toggle){% endtrans %}</th>
         </tr>
     </thead>
     <tbody>
@@ -27,7 +48,7 @@
         <tr>
             <td>{{ transaction.user.display_name }}</td>
             <td>{{ transaction.datetime | datetimeformat }}</td>
-            <td><i class="fa fa-{% if transaction.validated %}check text-success{% else %}times text-danger{% endif %}"></i></td>
+            <td><a class="bought-validated" href="{{ url('shop:ajax:bought_toggle', bought_id=transaction.id) }}"><i class="fa fa-{% if transaction.validated %}check text-success{% else %}times text-danger{% endif %}"></i></a></td>
         </tr>
         {% endfor %}
     </tbody>

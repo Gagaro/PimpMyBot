@@ -8,6 +8,7 @@ from utils import db
 from utils.modules import BaseModule
 from utils.translations import _
 
+from .api import buy_item, ShopItemParameter
 from .models import ShopItem, BoughtItem
 
 
@@ -25,10 +26,13 @@ class ShopModule(BaseModule):
     }]
 
     api = {
-        # 'buy_item': {
-        #     'title': _('Buy an item'),
-        #     'method': buy_item
-        # }
+        'buy_item': {
+            'title': _('Buy an item'),
+            'method': buy_item,
+            'parameters': [
+                ShopItemParameter('item', title="Shop item"),
+            ]
+        }
     }
 
     upgrades = []

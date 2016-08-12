@@ -1,3 +1,5 @@
+import datetime
+
 from peewee import Model, IntegerField, ForeignKeyField, CharField, BooleanField, DateTimeField
 
 from utils import db
@@ -13,6 +15,9 @@ class ShopItem(Model):
     price = IntegerField(null=False, default=0)
     active = BooleanField(default=True)
 
+    def __str__(self):
+        return self.name
+
     @property
     def transactions(self):
         return self.bought_items.select().order_by(BoughtItem.datetime.desc())
@@ -24,5 +29,5 @@ class BoughtItem(Model):
 
     user = ForeignKeyField(User, related_name='bought_items')
     item = ForeignKeyField(ShopItem, related_name='bought_items')
-    datetime = DateTimeField()
+    datetime = DateTimeField(default=datetime.datetime.now)
     validated = BooleanField(default=False)

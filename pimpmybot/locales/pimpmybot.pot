@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2016-02-29 10:00+0100\n"
+"POT-Creation-Date: 2016-06-06 10:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,123 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.2.0\n"
+
+#: pimpmybot/core_modules/money/money.py:19
+msgid "Allow users to gain moneys (virtual points)."
+msgstr ""
+
+#: pimpmybot/core_modules/money/money.py:23
+msgid "Money"
+msgstr ""
+
+#: pimpmybot/core_modules/money/money.py:27
+msgid "Settings"
+msgstr ""
+
+#: pimpmybot/core_modules/money/money.py:32
+msgid "Listing"
+msgstr ""
+
+#: pimpmybot/core_modules/money/money.py:41
+msgid "Current user money"
+msgstr ""
+
+#: pimpmybot/core_modules/strawpoll/strawpoll.py:14
+msgid "Last poll is {title} : {url}"
+msgstr ""
+
+#: pimpmybot/core_modules/strawpoll/strawpoll.py:21
+msgid "Create polls and show the results on stream in real time"
+msgstr ""
+
+#: pimpmybot/core_modules/strawpoll/strawpoll.py:24
+msgid "Strawpoll"
+msgstr ""
+
+#: pimpmybot/core_modules/strawpoll/strawpoll.py:31
+msgid "Last poll"
+msgstr ""
+
+#: pimpmybot/core_modules/strawpoll/views.py:49
+msgid "Poll created successfully."
+msgstr ""
+
+#: pimpmybot/core_modules/strawpoll/views.py:51
+msgid "Error while creating poll: {0}"
+msgstr ""
+
+#: pimpmybot/core_modules/strawpoll/templates/strawpoll_list.html:18
+msgid "Create poll"
+msgstr ""
+
+#: pimpmybot/core_modules/strawpoll/templates/strawpoll_list.html:36
+#: pimpmybot/core_modules/strawpoll/templates/strawpoll_list.html:38
+msgid "Title"
+msgstr ""
+
+#: pimpmybot/core_modules/strawpoll/templates/strawpoll_list.html:43
+msgid "Options"
+msgstr ""
+
+#: pimpmybot/core_modules/strawpoll/templates/strawpoll_list.html:45
+msgid "One per line, up to 30"
+msgstr ""
+
+#: pimpmybot/core_modules/strawpoll/templates/strawpoll_list.html:51
+msgid "Multiple responses possible"
+msgstr ""
+
+#: pimpmybot/core_modules/strawpoll/templates/strawpoll_list.html:57
+msgid "Send link on stream chat"
+msgstr ""
+
+#: pimpmybot/core_modules/strawpoll/templates/strawpoll_list.html:63
+msgid "Create"
+msgstr ""
+
+#: pimpmybot/core_modules/strawpoll/templates/strawpoll_list.html:73
+msgid "Poll"
+msgstr ""
+
+#: pimpmybot/core_modules/strawpoll/templates/strawpoll_list.html:74
+msgid "Url"
+msgstr ""
+
+#: pimpmybot/core_modules/strawpoll/templates/strawpoll_list.html:75
+msgid "Stream Widget"
+msgstr ""
+
+#: pimpmybot/core_modules/users/users.py:17
+msgid "Users"
+msgstr ""
+
+#: pimpmybot/core_modules/users/users.py:18
+msgid "Track users watching and interacting with the stream."
+msgstr ""
+
+#: pimpmybot/utils/modules/api.py:12
+msgid "Send a message"
+msgstr ""
+
+#: pimpmybot/wsgi/templates/configuration.html:9
+msgid "Twitch Bot"
+msgstr ""
+
+#: pimpmybot/wsgi/templates/configuration.html:12
+msgid "Twitch Bot Username"
+msgstr ""
+
+#: pimpmybot/wsgi/templates/configuration.html:17
+msgid "Twitch Bot Oauth Token"
+msgstr ""
+
+#: pimpmybot/wsgi/templates/configuration.html:23
+msgid "Enter the channel to join"
+msgstr ""
+
+#: pimpmybot/wsgi/templates/configuration.html:31
+msgid "Language"
+msgstr ""
 
 #: pimpmybot/wsgi/templates/modules.html:18
 msgid "Modules"
@@ -38,18 +155,45 @@ msgid "Uninstall"
 msgstr ""
 
 #: pimpmybot/wsgi/templates/modules.html:50
+#: pimpmybot/wsgi/templates/commands/add.html:48
 msgid "Save"
 msgstr ""
 
-#: pimpmybot/wsgi/views/modules.py:27
+#: pimpmybot/wsgi/templates/commands/add.html:3
+#: pimpmybot/wsgi/templates/commands/add.html:4
+msgid "Add a new command"
+msgstr ""
+
+#: pimpmybot/wsgi/templates/commands/add.html:14
+#: pimpmybot/wsgi/templates/commands/add.html:17
+msgid "Command"
+msgstr ""
+
+#: pimpmybot/wsgi/templates/commands/add.html:27
+msgid "Actions"
+msgstr ""
+
+#: pimpmybot/wsgi/views/commands.py:55
+msgid "Command created."
+msgstr ""
+
+#: pimpmybot/wsgi/views/commands.py:78
+msgid "Command deleted."
+msgstr ""
+
+#: pimpmybot/wsgi/views/commands.py:80
+msgid "Error while deleting command."
+msgstr ""
+
+#: pimpmybot/wsgi/views/modules.py:29
 msgid "Module is activated."
 msgstr ""
 
-#: pimpmybot/wsgi/views/modules.py:30
+#: pimpmybot/wsgi/views/modules.py:32
 msgid "Module uninstalled successfully."
 msgstr ""
 
-#: pimpmybot/wsgi/views/modules.py:45
+#: pimpmybot/wsgi/views/modules.py:47
 msgid "Module changed successfully."
 msgstr ""
 

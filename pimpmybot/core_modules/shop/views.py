@@ -52,7 +52,9 @@ def shop_list_item_detail(item_id):
     }
 
 
-@route('/shop/bought/<bought_id:int>/', name='money:ajax:user', method='PUT')
+@route('/shop/bought/<bought_id:int>/', name='shop:ajax:bought_toggle', method='PUT')
 def shop_validate_bought_item(bought_id):
-    # TODO
+    bought_item = BoughtItem.get(id=bought_id)
+    bought_item.validated = not bought_item.validated
+    bought_item.save()
     return HTTPResponse('OK')
