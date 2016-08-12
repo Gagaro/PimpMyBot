@@ -190,8 +190,9 @@ class ModulesList(dict):
                     module = __import__(file).module
                 # except ImportError:
                 #     logger.warning('Error importing {0}'.format(file))
-                except AttributeError:
-                    pass
+                except AttributeError as e:
+                    if file[:2] != '__':
+                        logger.debug("Could not import module '{0}': '{1}'".format(file, e))
                 except ImportError as e:
                     logger.debug("Could not import module '{0}': '{1}'".format(file, e))
                 else:
@@ -202,7 +203,8 @@ class ModulesList(dict):
                             module.run_upgrades()
                         if module.config.activated:
                             module.load()
-        sys.path = saved_paths
+        # Finally, we add every module paths to sys paths
+        sys.path = saved_paths + MODULES_PATHS
         logger.debug("Loading all modules end.")
 
 modules = ModulesList()

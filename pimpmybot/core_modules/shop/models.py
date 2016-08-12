@@ -2,7 +2,7 @@ from peewee import Model, IntegerField, ForeignKeyField, CharField, BooleanField
 
 from utils import db
 
-from core_modules.users.models import User  # TODO find a better way to import modules
+from users.models import User
 
 
 class ShopItem(Model):
