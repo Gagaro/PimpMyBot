@@ -15,6 +15,10 @@ class BaseParameter(object):
         """ Convert the python value to a printable one """
         return str(value)
 
+    def render_from_input(self, value):
+        """ Convert the value from the form input to a printable one. """
+        return self.render(self.normalize(value))
+
     def input(self, value=None):
         """ HTML input rendering. """
         raise NotImplementedError

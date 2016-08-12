@@ -100,7 +100,7 @@ $(document).ready(function() {
     $('form#add_action').submit(function() {
         var i = 0;
         $('div#actions div.action').each(function(){
-            $(this).find('input').each(function() {
+            $(this).find('input,select,textarea').each(function() {
                 $(this).attr('name', 'action' + i + $(this).attr('name'));
             });
             i++;
