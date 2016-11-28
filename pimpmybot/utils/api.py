@@ -4,6 +4,8 @@ Class helpers to help interacting with Twitch api.
 import dateutil.parser
 import requests
 
+CLIENT_ID = 'fv6qtw5h3065oncwqpyzud1bb9s10ld'
+
 
 class BaseApi(object):
 
@@ -25,7 +27,8 @@ class BaseApi(object):
         url = 'https://api.twitch.tv/kraken{0}'.format(path)
         headers = {
             'Accept': 'application/vnd.twitchtv.v{0}+json'.format(version),
-            'Authorization': 'OAuth {0}'.format(self.oauth)
+            'Authorization': 'OAuth {0}'.format(self.oauth),
+            'Client-ID': CLIENT_ID,
         }
         response = requests.get(url, headers=headers)
         response.raise_for_status()
